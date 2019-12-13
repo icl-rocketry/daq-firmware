@@ -1,3 +1,6 @@
+#ifndef ADS131M04REGISTERS_H
+#define ADS131M04REGISTERS_H
+
 /* Definitions of all the addresses of the registers of the ADS131M04
    Chip. For the content of the registers, please refer to the datasheet:
 
@@ -37,3 +40,5 @@
 #define CH3_GCAL_LSB 1Ch
 #define REGMAP_CRC 3Eh
 #define RESERVED 3Fh
+
+#endif
