@@ -2,7 +2,7 @@
 //     public:
 
 // };
-#include <Arduino.h>;
+#include <Arduino.h>
 #include <Adafruit_MAX31855.h>
 #include "daq_pins.h"
 
