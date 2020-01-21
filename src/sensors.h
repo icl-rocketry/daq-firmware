@@ -7,6 +7,6 @@
 #include "daq_pins.h"
 
 void setupSensors();
-double readThermocoupleInternal(uint8_t i);
+double readThermocoupleInternal();
 double readThermocoupleCelsius(uint8_t i);
 double readPtap(uint16_t i);
