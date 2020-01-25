@@ -1,5 +1,6 @@
 #include "sensors.h"
 #include <SD.h>
+#include <FS.h>
 #include <SPI.h>
 #include <iostream>
 #include <fstream>
@@ -27,7 +28,8 @@ struct sensors {
 
 sensors sensorData;
 
-std::fstream fout;
+// std::fstream fout;
+File file;
 
 void setupSensors() {
     vspi.setClockDivider(SPI_CLOCK_DIV8);
@@ -61,7 +63,15 @@ void setupSD(){
         return;
     }
     Serial.println("Card initialized.");
-    fout.open("sensors_data.csv", std::ios::out | std::ios::app);
+    // fout.open("sensors_data.csv", std::ios::out | std::ios::app);
+
+    file = SD.open("/sensor_data2.csv", FILE_WRITE);
+
+    if(!file)
+    {
+        Serial.println("File could not be opened");
+    }
+
 }
 
 double readThermocoupleInternal(){
@@ -132,19 +142,27 @@ void dataLoop() {
     sensorData.ptap4 = analogRead(PTAP4);
     sensorData.ptap5 = analogRead(PTAP5);   
 
-    fout << sensorData.thermo1ambient << ","
-            << sensorData.thermo1celsius << ","
-            << sensorData.thermo2celsius << ","
-            << sensorData.thermo3celsius << ","
-            << sensorData.thermo4celsius << ","
-            << sensorData.ptap1 << ","
-            << sensorData.ptap2 << ","
-            << sensorData.ptap3 << ","
-            << sensorData.ptap4 << ","
-            << sensorData.ptap5 << ","
-            << "/n";
+    // fout << sensorData.thermo1ambient << ","
+    //         << sensorData.thermo1celsius << ","
+    //         << sensorData.thermo2celsius << ","
+    //         << sensorData.thermo3celsius << ","
+    //         << sensorData.thermo4celsius << ","
+    //         << sensorData.ptap1 << ","
+    //         << sensorData.ptap2 << ","
+    //         << sensorData.ptap3 << ","
+    //         << sensorData.ptap4 << ","
+    //         << sensorData.ptap5 << ","
+    //         << "/n";
 
-    fout.flush();
+    // fout.flush();
+
+    
+    if(!file.print("yeet"))
+    {
+        Serial.println("File's fucked mate");
+    }
+
+    file.flush();
 }
 
 
