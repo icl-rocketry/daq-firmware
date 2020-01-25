@@ -14,21 +14,24 @@ Adafruit_MAX31855 thermocouple3(TC_CS3, &vspi);
 Adafruit_MAX31855 thermocouple4(TC_CS4, &vspi);
 
 struct sensors {
-    double thermo1ambient;
-    double thermo1celsius;
-    double thermo2celsius;
-    double thermo3celsius;
-    double thermo4celsius;
+    double thermoAmbient;
+    double thermo1;
+    double thermo2;
+    double thermo3;
+    double thermo4;
     double ptap1;
     double ptap2;
     double ptap3;
     double ptap4;
     double ptap5;
+    uint16_t load1;
+    uint16_t load2;
+    uint16_t load3;
+    uint16_t load4;
 };
 
 sensors sensorData;
 
-// std::fstream fout;
 File file;
 
 void setupSensors() {
@@ -129,38 +132,54 @@ double readPtap(uint16_t i){
 }
 
 void dataLoop() {
+
     Serial.println("Logging data");
 
-    sensorData.thermo1ambient = thermocouple1.readInternal();    
-    sensorData.thermo1celsius = thermocouple1.readCelsius();
-    sensorData.thermo2celsius = thermocouple2.readCelsius();
-    sensorData.thermo3celsius = thermocouple3.readCelsius();
-    sensorData.thermo4celsius = thermocouple4.readCelsius();
+    sensorData.thermoAmbient = thermocouple1.readInternal();    
+    sensorData.thermo1 = thermocouple1.readCelsius();
+    sensorData.thermo2 = thermocouple2.readCelsius();
+    sensorData.thermo3 = thermocouple3.readCelsius();
+    sensorData.thermo4 = thermocouple4.readCelsius();
     sensorData.ptap1 = analogRead(PTAP1);
     sensorData.ptap2 = analogRead(PTAP2);
     sensorData.ptap3 = analogRead(PTAP3);
     sensorData.ptap4 = analogRead(PTAP4);
-    sensorData.ptap5 = analogRead(PTAP5);   
-
-    // fout << sensorData.thermo1ambient << ","
-    //         << sensorData.thermo1celsius << ","
-    //         << sensorData.thermo2celsius << ","
-    //         << sensorData.thermo3celsius << ","
-    //         << sensorData.thermo4celsius << ","
-    //         << sensorData.ptap1 << ","
-    //         << sensorData.ptap2 << ","
-    //         << sensorData.ptap3 << ","
-    //         << sensorData.ptap4 << ","
-    //         << sensorData.ptap5 << ","
-    //         << "/n";
-
-    // fout.flush();
-
+    sensorData.ptap5 = analogRead(PTAP5);
     
     if(!file.print("yeet"))
     {
         Serial.println("File's fucked mate");
     }
+
+    file.print(sensorData.thermoAmbient);
+    file.print(",");
+    file.print(sensorData.thermo1);
+    file.print(",");
+    file.print(sensorData.thermo2);
+    file.print(",");
+    file.print(sensorData.thermo3);
+    file.print(",");
+    file.print(sensorData.thermo4);
+    file.print(",");
+    file.print(sensorData.ptap1);
+    file.print(",");
+    file.print(sensorData.ptap2);
+    file.print(",");
+    file.print(sensorData.ptap3);
+    file.print(",");
+    file.print(sensorData.ptap4);
+    file.print(",");
+    file.print(sensorData.ptap5);
+    file.print(",");
+    file.print(sensorData.load1);
+    file.print(",");
+    file.print(sensorData.load2);
+    file.print(",");
+    file.print(sensorData.load3);
+    file.print(",");
+    file.print(sensorData.load4);
+    file.print(",");
+    file.print("\n");
 
     file.flush();
 }
