@@ -1,6 +1,8 @@
 #include "sensors.h"
 #include <SD.h>
 #include <SPI.h>
+#include <iostream>
+#include <fstream>
 
 SPIClass vspi(VSPI);
 
@@ -24,7 +26,7 @@ struct sensors {
 
 sensors sensorData;
 
-File dataFile;
+std::fstream fout;
 
 void setupSensors() {
     vspi.setClockDivider(SPI_CLOCK_DIV8);
@@ -57,7 +59,7 @@ void setupSD(){
         return;
     }
     Serial.println("Card initialized.");
-    dataFile = SD.open("sensors_data.txt", FILE_WRITE);
+    fout.open("sensors_data.csv", std::ios::out | std::ios::app);
 }
 
 double readThermocoupleInternal(){
@@ -125,7 +127,17 @@ void dataLoop() {
     sensorData.ptap3 = analogRead(PTAP3);
     sensorData.ptap4 = analogRead(PTAP4);
     sensorData.ptap5 = analogRead(PTAP5);   
-    dataFile.write((const uint8_t *)&sensorData, sizeof(sensorData));
+    fout << sensorData.thermo1ambient << ","
+            << sensorData.thermo1celsius << ","
+            << sensorData.thermo2celsius << ","
+            << sensorData.thermo3celsius << ","
+            << sensorData.thermo4celsius << ","
+            << sensorData.ptap1 << ","
+            << sensorData.ptap2 << ","
+            << sensorData.ptap3 << ","
+            << sensorData.ptap4 << ","
+            << sensorData.ptap5 << ","
+            << "/n";
 }
 
 
