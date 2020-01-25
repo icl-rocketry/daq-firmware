@@ -1,4 +1,6 @@
 #include "sensors.h"
+#include <SD.h>
+#include <SPI.h>
 
 SPIClass vspi(VSPI);
 
@@ -22,6 +24,8 @@ struct sensors {
 
 sensors sensorData;
 
+File dataFile;
+
 void setupSensors() {
     vspi.setClockDivider(SPI_CLOCK_DIV8);
     vspi.begin();
@@ -43,18 +47,18 @@ void setupSensors() {
 
 }
 
-// void setupSD(){
-//     Serial.print("Initializing SD card...");
-//     pinMode(13, OUTPUT);
+void setupSD(){
+    Serial.begin(9600);
+    Serial.print("Initializing SD card...");
+    pinMode(13, OUTPUT);
 
-//     if (!SD.begin(13)) {
-//         Serial.println("Card failed, or not present");
-//         return;
-//     }
-
-//     Serial.println("Card initialized.");
-//     dataFile = SD.open("sensors_data.txt", FILE_WRITE);
-// }
+    if (!SD.begin()) {
+        Serial.println("Card failed, or not present");
+        return;
+    }
+    Serial.println("Card initialized.");
+    dataFile = SD.open("sensors_data.txt", FILE_WRITE);
+}
 
 double readThermocoupleInternal(){
     return thermocouple1.readInternal();
@@ -110,18 +114,18 @@ double readPtap(uint16_t i){
     }
 }
 
-// void loop() {
-//     sensorData.thermo1ambient = thermocouple1.readInternal();    
-//     sensorData.thermo1celsius = thermocouple1.readCelsius();
-//     sensorData.thermo2celsius = thermocouple2.readCelsius();
-//     sensorData.thermo3celsius = thermocouple3.readCelsius();
-//     sensorData.thermo4celsius = thermocouple4.readCelsius();
-//     sensorData.ptap1 = analogRead(PTAP1);
-//     sensorData.ptap2 = analogRead(PTAP2);
-//     sensorData.ptap3 = analogRead(PTAP3);
-//     sensorData.ptap4 = analogRead(PTAP4);
-//     sensorData.ptap5 = analogRead(PTAP5);   
-//     // dataFile.write((const uint8_t *)&sensors, sizeof(sensors));
-// }
+void dataLoop() {
+    sensorData.thermo1ambient = thermocouple1.readInternal();    
+    sensorData.thermo1celsius = thermocouple1.readCelsius();
+    sensorData.thermo2celsius = thermocouple2.readCelsius();
+    sensorData.thermo3celsius = thermocouple3.readCelsius();
+    sensorData.thermo4celsius = thermocouple4.readCelsius();
+    sensorData.ptap1 = analogRead(PTAP1);
+    sensorData.ptap2 = analogRead(PTAP2);
+    sensorData.ptap3 = analogRead(PTAP3);
+    sensorData.ptap4 = analogRead(PTAP4);
+    sensorData.ptap5 = analogRead(PTAP5);   
+    dataFile.write((const uint8_t *)&sensorData, sizeof(sensorData));
+}
 
 
