@@ -5,6 +5,7 @@
 #include <fstream>
 
 SPIClass vspi(VSPI);
+SPIClass sdspi(HSPI);
 
 Adafruit_MAX31855 thermocouple1(TC_CS1, &vspi);
 Adafruit_MAX31855 thermocouple2(TC_CS2, &vspi);
@@ -50,11 +51,12 @@ void setupSensors() {
 }
 
 void setupSD(){
-    Serial.begin(9600);
+    sdspi.begin(14, 2, 15, -1);
+
     Serial.print("Initializing SD card...");
     pinMode(13, OUTPUT);
 
-    if (!SD.begin()) {
+    if (!SD.begin(13, sdspi)) {
         Serial.println("Card failed, or not present");
         return;
     }
@@ -117,6 +119,8 @@ double readPtap(uint16_t i){
 }
 
 void dataLoop() {
+    Serial.println("Logging data");
+
     sensorData.thermo1ambient = thermocouple1.readInternal();    
     sensorData.thermo1celsius = thermocouple1.readCelsius();
     sensorData.thermo2celsius = thermocouple2.readCelsius();
@@ -127,6 +131,7 @@ void dataLoop() {
     sensorData.ptap3 = analogRead(PTAP3);
     sensorData.ptap4 = analogRead(PTAP4);
     sensorData.ptap5 = analogRead(PTAP5);   
+
     fout << sensorData.thermo1ambient << ","
             << sensorData.thermo1celsius << ","
             << sensorData.thermo2celsius << ","
@@ -138,6 +143,8 @@ void dataLoop() {
             << sensorData.ptap4 << ","
             << sensorData.ptap5 << ","
             << "/n";
+
+    fout.flush();
 }
 
 
