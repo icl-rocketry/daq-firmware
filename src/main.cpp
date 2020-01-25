@@ -7,6 +7,7 @@ void setup() {
   Serial.begin(9600);
   
   setupSensors();
+  setupSD();
 }
 
 void loop() {
@@ -19,4 +20,5 @@ void loop() {
   Serial.print("Pressure = ");
   Serial.println(readPtap(1));
   delay(500);
+  dataLoop();
 }
