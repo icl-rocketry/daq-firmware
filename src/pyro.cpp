@@ -30,14 +30,22 @@ void setupWIFI() {
   Serial.println("AP IP address: ");
   Serial.println(WiFi.softAPIP());
   server.begin();
+
 }
 
 void WIFIloop(){
   WiFiClient client = server.available();
   // Start connection
-  client.connected();
-  Serial.println("New client connected.");
-  header += client.read();
+  if (client.connected()){
+    Serial.println("New client.");
+  } else {
+      Serial.println("Connection failed.");
+  }
+  if (client.available()) {
+  char c = client.read();
+  Serial.print(c);
+  header += c;
+  }
   // Turns the EMatch on and off
   if (header.indexOf("GET /12/on") >= 0) {
     Serial.println("EMatch on");
@@ -48,7 +56,6 @@ void WIFIloop(){
     pyroState = "off";
     digitalWrite(PYRO_CHANNEL_PIN, LOW);
   }
-            
   // Display the HTML web page
   Serial.println("Displaying HTML");
   client.println("<!DOCTYPE html><html>");
@@ -70,12 +77,13 @@ void WIFIloop(){
   } else {
     client.println("<p><a href=\"/26/off\"><button class=\"button button2\">OFF</button></a></p>");
   } 
-          
   client.println("</body></html>");
-            
   // Clear the header variable
   header = "";
   // Close the connection
-  client.stop();
-  Serial.println("Client disconnected.");
+  if (!client.connected()) {
+    Serial.println();
+    Serial.println("Disconnecting...");
+    client.stop();
+  }
 }
