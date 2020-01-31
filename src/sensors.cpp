@@ -5,6 +5,8 @@
 #include <SPI.h>
 #include <iostream>
 #include <fstream>
+#include "ADS131M04.h"
+#include "daq_pins.h"
 
 //class
 SPIClass vspi(VSPI);
@@ -14,6 +16,7 @@ Adafruit_MAX31855 thermocouple1(TC_CS1, &vspi);
 Adafruit_MAX31855 thermocouple2(TC_CS2, &vspi);
 Adafruit_MAX31855 thermocouple3(TC_CS3, &vspi);
 Adafruit_MAX31855 thermocouple4(TC_CS4, &vspi);
+ADS131M04 ADC=ADS131M04(ADC_CS, CLKOUT, &vspi);
 
 // struct containing data from sensors
 struct sensors {
