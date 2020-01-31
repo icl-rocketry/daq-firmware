@@ -1,10 +1,11 @@
 // Load Wi-Fi library
 #include <WiFi.h>
 #include "sensors.h"
+#include "pyro.h"
 
 // WIFI credentials
-const char* ssid     = ""; //custom ssid
-const char* password = ""; //custom pw
+const char* ssid     = "Test"; //custom ssid
+const char* password = "Test"; //custom pw
 
 // Set web server port number to 80
 WiFiServer server(80);
@@ -32,7 +33,7 @@ void setupWIFI() {
 }
 
 void WIFIloop(){
-  WiFiClient client = server.available;
+  WiFiClient client = server.available();
   // Start connection
   client.connected();
   Serial.println("New client connected.");
@@ -49,6 +50,7 @@ void WIFIloop(){
   }
             
   // Display the HTML web page
+  Serial.println("Displaying HTML");
   client.println("<!DOCTYPE html><html>");
   client.println("<head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">");
   client.println("<link rel=\"icon\" href=\"data:,\">");
