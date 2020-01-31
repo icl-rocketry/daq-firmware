@@ -47,6 +47,7 @@ void setupSensors() {
     vspi.setClockDivider(SPI_CLOCK_DIV8);
     vspi.begin();
 
+    ADC.begin();
     thermocouple1.begin();
     thermocouple2.begin();
     thermocouple3.begin();
@@ -162,6 +163,17 @@ void dataLoop() {
     sensorData.ptap3 = analogRead(PTAP3);
     sensorData.ptap4 = analogRead(PTAP4);
     sensorData.ptap5 = analogRead(PTAP5);
+
+    // Read ADC data
+    int32_t AdcOutArr[4];
+    int8_t AdcChanArr[4] = {0, 1, 2, 3};
+
+    ADC.rawChannels(&AdcChanArr[0], 4, &AdcOutArr[0]);
+
+    sensorData.load1 = AdcOutArr[0];
+    sensorData.load2 = AdcOutArr[1];
+    sensorData.load3 = AdcOutArr[2];
+    sensorData.load4 = AdcOutArr[3];
     
     // if(!file.print("yeet"))
     // {
