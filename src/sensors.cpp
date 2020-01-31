@@ -48,11 +48,13 @@ void setupSensors() {
     thermocouple2.begin();
     thermocouple3.begin();
     thermocouple4.begin();
+    //initialise output variables as output
     pinMode(TC_CS1, OUTPUT);
     pinMode(TC_CS2, OUTPUT);
     pinMode(TC_CS3, OUTPUT);
     pinMode(TC_CS4, OUTPUT);
     pinMode(ADC_CS, OUTPUT);
+    //initialise outputs as high
     digitalWrite(TC_CS1, HIGH);
     digitalWrite(TC_CS2, HIGH);
     digitalWrite(TC_CS3, HIGH);

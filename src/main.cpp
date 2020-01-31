@@ -8,6 +8,7 @@ void setup() {
   
   setupSensors();
   setupSD();
+  setupWIFI();
 }
 
 void loop() {
