@@ -27,10 +27,10 @@ struct sensors {
     double ptap3;
     double ptap4;
     double ptap5;
-    uint16_t load1;
-    uint16_t load2;
-    uint16_t load3;
-    uint16_t load4;
+    int32_t load1;
+    int32_t load2;
+    int32_t load3;
+    int32_t load4;
 };
 
 //create instance for struct
