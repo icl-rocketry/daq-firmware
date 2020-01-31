@@ -1,3 +1,4 @@
+//header files
 #include "sensors.h"
 #include <SD.h>
 #include <FS.h>
@@ -5,6 +6,7 @@
 #include <iostream>
 #include <fstream>
 
+//class
 SPIClass vspi(VSPI);
 SPIClass sdspi(HSPI);
 
@@ -13,6 +15,7 @@ Adafruit_MAX31855 thermocouple2(TC_CS2, &vspi);
 Adafruit_MAX31855 thermocouple3(TC_CS3, &vspi);
 Adafruit_MAX31855 thermocouple4(TC_CS4, &vspi);
 
+// struct containing data from sensors
 struct sensors {
     double thermoAmbient;
     double thermo1;
@@ -30,10 +33,13 @@ struct sensors {
     uint16_t load4;
 };
 
+//create instance for struct
 sensors sensorData;
 
+//create a file
 File file;
 
+// set up the thermocouples
 void setupSensors() {
     vspi.setClockDivider(SPI_CLOCK_DIV8);
     vspi.begin();
@@ -55,21 +61,25 @@ void setupSensors() {
 
 }
 
+//set up the SD card
 void setupSD(){
+    //spi pins
     sdspi.begin(14, 2, 15, -1);
 
     Serial.print("Initializing SD card...");
     pinMode(13, OUTPUT);
 
+    //return error message if SD card not present
     if (!SD.begin(13, sdspi)) {
         Serial.println("Card failed, or not present");
         return;
     }
     Serial.println("Card initialized.");
-    // fout.open("sensors_data.csv", std::ios::out | std::ios::app);
 
-    file = SD.open("/sensor_data2.csv", FILE_WRITE);
+    //opening file in SD 
+    file = SD.open("/sensor_data.csv", FILE_WRITE);
 
+    //error message if file is not opened
     if(!file)
     {
         Serial.println("File could not be opened");
@@ -77,10 +87,12 @@ void setupSD(){
 
 }
 
+//read ambient temp
 double readThermocoupleInternal(){
     return thermocouple1.readInternal();
 }
 
+//read temp
 double readThermocoupleCelsius(uint8_t i){
     switch(i){
         case 1:
@@ -104,6 +116,7 @@ double readThermocoupleCelsius(uint8_t i){
     }
 }
 
+//read pressure
 double readPtap(uint16_t i){
     switch(i){
         case 1:
@@ -135,6 +148,7 @@ void dataLoop() {
 
     Serial.println("Logging data");
 
+    //writing data into struct
     sensorData.thermoAmbient = thermocouple1.readInternal();    
     sensorData.thermo1 = thermocouple1.readCelsius();
     sensorData.thermo2 = thermocouple2.readCelsius();
@@ -146,11 +160,12 @@ void dataLoop() {
     sensorData.ptap4 = analogRead(PTAP4);
     sensorData.ptap5 = analogRead(PTAP5);
     
-    if(!file.print("yeet"))
-    {
-        Serial.println("File's fucked mate");
-    }
+    // if(!file.print("yeet"))
+    // {
+    //    Serial.println("File's fucked mate");
+    //}
 
+    //printing data into csv file
     file.print(sensorData.thermoAmbient);
     file.print(",");
     file.print(sensorData.thermo1);
