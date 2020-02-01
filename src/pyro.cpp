@@ -4,8 +4,8 @@
 #include "pyro.h"
 
 // WIFI credentials
-const char* ssid     = "yourSSID"; //custom ssid
-const char* password = "yourPassword"; //custom pw
+const char* ssid     = "ICLR_DAQ"; 
+const char* password = "rocketsAreCool!";
 
 // Set web server port number to 80
 WiFiServer server(80);
