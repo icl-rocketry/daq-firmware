@@ -9,9 +9,13 @@ void setup() {
   setupSensors();
   setupSD();
   setupWIFI();
+
+  bool EMatchBlown=false;
+  while (!EMatchBlown) {
+    EMatchBlown = WIFIloop();
+  }
 }
 
 void loop() {
-  dataLoop(WIFIloop());
-  delay(500);
+  dataLoop(true);
 }
