@@ -69,6 +69,9 @@ void setupSensors() {
 
     // Set ADC gain to 4
     ADC.setGain(2,2,2,2);
+
+    // Activate global chop mode on the ADC
+    ADC.globalChop(true);
 }
 
 //set up the SD card
