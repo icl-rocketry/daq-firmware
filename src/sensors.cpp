@@ -70,7 +70,7 @@ void setupSensors() {
 }
 
 //set up the SD card
-void setupSD(){
+bool setupSD(){
     //spi pins
     sdspi.begin(14, 2, 15, -1);
 
@@ -80,7 +80,7 @@ void setupSD(){
     //return error message if SD card not present
     if (!SD.begin(13, sdspi)) {
         Serial.println("Card failed, or not present");
-        return;
+        return false;
     }
     Serial.println("Card initialized.");
 
@@ -91,8 +91,9 @@ void setupSD(){
     if(!file)
     {
         Serial.println("File could not be opened");
+        return false
     }
-
+    return true
 }
 
 //read ambient temp
