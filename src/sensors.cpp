@@ -91,9 +91,9 @@ bool setupSD(){
     if(!file)
     {
         Serial.println("File could not be opened");
-        return false
+        return false;
     }
-    return true
+    return true;
 }
 
 //read ambient temp

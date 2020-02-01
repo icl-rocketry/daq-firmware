@@ -7,7 +7,9 @@ void setup() {
   Serial.begin(115200);
   
   setupSensors();
-  setupSD();
+
+  // Do nothing until the SD card has initialised
+  while (!setupSD()) {}
   setupWIFI();
 
   bool EMatchBlown=false;
