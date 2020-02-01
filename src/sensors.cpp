@@ -67,6 +67,8 @@ void setupSensors() {
     digitalWrite(TC_CS4, HIGH);
     digitalWrite(ADC_CS, HIGH);
 
+    // Set ADC gain to 4
+    ADC.setGain(2,2,2,2);
 }
 
 //set up the SD card
