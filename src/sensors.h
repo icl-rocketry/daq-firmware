@@ -10,5 +10,5 @@ void setupSensors();
 double readThermocoupleInternal();
 double readThermocoupleCelsius(uint8_t i);
 double readPtap(uint16_t i);
-void dataLoop();
+void dataLoop(bool EMatchState);
 void setupSD();

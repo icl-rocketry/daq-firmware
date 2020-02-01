@@ -22,6 +22,5 @@ void loop() {
   // Serial.print("Pressure = ");
   // Serial.println(readPtap(1));
   delay(500);
-  dataLoop();
-  WIFIloop();
+  dataLoop(WIFIloop());
 }
