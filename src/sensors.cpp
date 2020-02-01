@@ -90,7 +90,7 @@ bool setupSD(){
     Serial.println("Card initialized.");
 
     //opening file in SD 
-    file = SD.open("/sensor_data.csv", FILE_WRITE);
+    file = SD.open("/sensor_data.csv", FILE_APPEND);
 
     //error message if file is not opened
     if(!file)
