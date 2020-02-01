@@ -6,6 +6,6 @@
 #define PYRO_H
 
 void setupWIFI();
-void WIFIloop();
+bool WIFIloop();
 
 #endif

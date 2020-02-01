@@ -34,6 +34,8 @@ struct sensors {
     int32_t load2;
     int32_t load3;
     int32_t load4;
+    uint32_t currTime;
+    bool EMatchBlown = false;
 };
 
 //create instance for struct
@@ -150,7 +152,7 @@ double readPtap(uint16_t i){
     }
 }
 
-void dataLoop() {
+void dataLoop(bool EMatchState) {
 
     Serial.println("Logging data");
 
@@ -165,6 +167,8 @@ void dataLoop() {
     sensorData.ptap3 = analogRead(PTAP3);
     sensorData.ptap4 = analogRead(PTAP4);
     sensorData.ptap5 = analogRead(PTAP5);
+    sensorData.currTime = millis();
+    sensorData.EMatchBlown = EMatchState;
 
     // Read ADC data
     int32_t AdcOutArr[4];
@@ -210,6 +214,10 @@ void dataLoop() {
     file.print(sensorData.load3);
     file.print(",");
     file.print(sensorData.load4);
+    file.print(",");
+    file.print(sensorData.currTime);
+    file.print(",");
+    file.print(sensorData.EMatchBlown);
     file.print(",");
     file.print("\n");
 
