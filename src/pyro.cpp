@@ -4,8 +4,8 @@
 #include "pyro.h"
 
 // WIFI credentials
-const char* ssid     = "yourSSID"; //custom ssid
-const char* password = "yourPassword"; //custom pw
+const char* ssid     = "ICLR_DAQ"; 
+const char* password = "rocketsAreCool!";
 
 // Set web server port number to 80
 WiFiServer server(80);
@@ -79,9 +79,9 @@ bool WIFIloop(){
             client.println("<link rel=\"icon\" href=\"data:,\">");
             // CSS to style the on/off buttons 
             client.println("<style>html { font-family: Helvetica; display: inline-block; margin: 0px auto; text-align: center;}");
-            client.println(".button { background-color: #FFFFFF; border: none; color: white; padding: 16px 40px;");
+            client.println(".button { background-color: #00FF00; border: none; color: white; padding: 16px 40px;");
             client.println("text-decoration: none; font-size: 30px; margin: 2px; cursor: pointer;}");
-            client.println(".button2 {background-color: #555555;}</style></head>");
+            client.println(".button2 {background-color: #FF0000;}</style></head>");
             
             // Web Page Heading
             client.println("<body><h1>ESP32 Web Server</h1>");
