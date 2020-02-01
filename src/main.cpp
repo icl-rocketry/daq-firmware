@@ -1,5 +1,6 @@
 #include <Arduino.h>
 #include "sensors.h"
+#include "pyro.h"
 
 void setup() {
   // put your setup code here, to run once:
@@ -8,6 +9,7 @@ void setup() {
   
   setupSensors();
   setupSD();
+  setupWIFI();
 }
 
 void loop() {
@@ -21,4 +23,5 @@ void loop() {
   // Serial.println(readPtap(1));
   delay(500);
   dataLoop();
+  WIFIloop();
 }
