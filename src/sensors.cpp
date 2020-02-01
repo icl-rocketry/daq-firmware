@@ -5,6 +5,8 @@
 #include <SPI.h>
 #include <iostream>
 #include <fstream>
+#include "ADS131M04.h"
+#include "daq_pins.h"
 
 //class
 SPIClass vspi(VSPI);
@@ -14,6 +16,7 @@ Adafruit_MAX31855 thermocouple1(TC_CS1, &vspi);
 Adafruit_MAX31855 thermocouple2(TC_CS2, &vspi);
 Adafruit_MAX31855 thermocouple3(TC_CS3, &vspi);
 Adafruit_MAX31855 thermocouple4(TC_CS4, &vspi);
+ADS131M04 ADC=ADS131M04(ADC_CS, CLKOUT, &vspi);
 
 // struct containing data from sensors
 struct sensors {
@@ -27,10 +30,10 @@ struct sensors {
     double ptap3;
     double ptap4;
     double ptap5;
-    uint16_t load1;
-    uint16_t load2;
-    uint16_t load3;
-    uint16_t load4;
+    int32_t load1;
+    int32_t load2;
+    int32_t load3;
+    int32_t load4;
 };
 
 //create instance for struct
@@ -44,6 +47,7 @@ void setupSensors() {
     vspi.setClockDivider(SPI_CLOCK_DIV8);
     vspi.begin();
 
+    ADC.begin();
     thermocouple1.begin();
     thermocouple2.begin();
     thermocouple3.begin();
@@ -161,6 +165,17 @@ void dataLoop() {
     sensorData.ptap3 = analogRead(PTAP3);
     sensorData.ptap4 = analogRead(PTAP4);
     sensorData.ptap5 = analogRead(PTAP5);
+
+    // Read ADC data
+    int32_t AdcOutArr[4];
+    int8_t AdcChanArr[4] = {0, 1, 2, 3};
+
+    ADC.rawChannels(&AdcChanArr[0], 4, &AdcOutArr[0]);
+
+    sensorData.load1 = AdcOutArr[0];
+    sensorData.load2 = AdcOutArr[1];
+    sensorData.load3 = AdcOutArr[2];
+    sensorData.load4 = AdcOutArr[3];
     
     // if(!file.print("yeet"))
     // {
