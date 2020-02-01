@@ -60,6 +60,38 @@ Returns the raw value read from a single channel ```channel```.
 
 It is a wrapper function of the ```rawChannels``` method, thus if multiple channels need to be read, that method will be faster.
 
+### Changing ADC Settings
+
+#### Setting Gain
+
+```
+bool setGain(uint8_t log2Gain0 = 0, uint8_t log2Gain1 = 0, uint8_t log2Gain2 = 0, uint8_t log2Gain3 = 0);
+```
+
+This function sets the gain of the four channels of the ADC, using its programmable gain amplifier.
+
+```uint8_t log2Gain0 = 0, uint8_t log2Gain1 = 0, uint8_t log2Gain2 = 0, uint8_t log2Gain3 = 0``` are the inputs. These are the log base 2 of the gain to set to each channel.
+
+Function returns true if gain was succesfully set.
+
+Written by Iris Clercq-Roques.
+
+#### Changing Global-Chop mode settings
+
+```
+bool globalChop(bool enabled = false, uint8_t log2delay = 4);
+```
+
+This function configures the appropriate register such as to set the global-chop settings as defined by the inputs. Other contents of the register remain unchanged.
+
+Inputs:
+
+* ```bool enabled = false```: Whether to enable global-chop mode.
+
+* ```uint8_t log2delay = 4```: logarithm with base 2 of the desired delay in modulator clock periods before measurement begins.  Possible values are between and including 1 and 16, to give delays between 2 and 65536 clock periods respectively. For more information, refer to the datasheet.
+
+Returns true if settings were written succesfully.
+
 ### Registers
 
 #### Reading a single register

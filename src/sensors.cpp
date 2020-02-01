@@ -67,10 +67,15 @@ void setupSensors() {
     digitalWrite(TC_CS4, HIGH);
     digitalWrite(ADC_CS, HIGH);
 
+    // Set ADC gain to 4
+    ADC.setGain(2,2,2,2);
+
+    // Activate global chop mode on the ADC
+    ADC.globalChop(true);
 }
 
 //set up the SD card
-void setupSD(){
+bool setupSD(){
     //spi pins
     sdspi.begin(14, 2, 15, -1);
 
@@ -80,7 +85,7 @@ void setupSD(){
     //return error message if SD card not present
     if (!SD.begin(13, sdspi)) {
         Serial.println("Card failed, or not present");
-        return;
+        return false;
     }
     Serial.println("Card initialized.");
 
@@ -91,8 +96,9 @@ void setupSD(){
     if(!file)
     {
         Serial.println("File could not be opened");
+        return false;
     }
-
+    return true;
 }
 
 //read ambient temp

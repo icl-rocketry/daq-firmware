@@ -7,11 +7,17 @@ void setup() {
   Serial.begin(115200);
   
   setupSensors();
-  setupSD();
+
+  // Do nothing until the SD card has initialised
+  while (!setupSD()) {}
   setupWIFI();
+
+  bool EMatchBlown=false;
+  while (!EMatchBlown) {
+    EMatchBlown = WIFIloop();
+  }
 }
 
 void loop() {
-  dataLoop(WIFIloop());
-  delay(500);
+  dataLoop(true);
 }

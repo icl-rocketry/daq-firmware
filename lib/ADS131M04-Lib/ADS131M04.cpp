@@ -7,7 +7,7 @@
    https://www.ti.com/lit/gpn/ads131m04
 
    This library was made for Imperial College London Rocketry
-   Created by Daniele Valentino Bella
+   Created by Daniele Valentino Bella & Iris Clercq-Roques
 */
 
 #include <Arduino.h>
@@ -71,6 +71,30 @@ int32_t ADS131M04::rawChannelSingle(int8_t channel) {
   return outputArr[0];
 }
 
+bool ADS131M04::globalChop(bool enabled, uint8_t log2delay) {
+  /* Function to configure global chop mode for the ADS131M04.
+
+     INPUTS:
+     enabled - Whether to enable global-chop mode.
+     log2delay   - Base 2 log of the desired delay in modulator clocks periods
+     before measurment begins
+     Possible values are between and including 1 and 16, to give delays
+     between 2 and 65536 clock periods respectively
+     For more information, refer to the datasheet.
+
+     Returns true if settings were written succesfully.
+  */
+
+  uint8_t delayRegData = log2delay - 1;
+
+  // Get current settings for current detect mode from the CFG register
+  uint16_t currentDetSett = (readReg(CFG) << 8) >>8;
+  
+  uint16_t newRegData = (delayRegData << 12) + (enabled << 8) + currentDetSett;
+
+  return writeReg(CFG, newRegData);
+}
+
 bool ADS131M04::writeReg(uint8_t reg, uint16_t data) {
   /* Writes the content of data to the register reg
      Returns true if successful
@@ -105,6 +129,24 @@ bool ADS131M04::writeReg(uint8_t reg, uint16_t data) {
   } else {
     return false;
   }
+}
+
+bool ADS131M04::setGain(uint8_t log2Gain0, uint8_t log2gainCommand, uint8_t log2Gain2, uint8_t log2Gain3) {
+  /* Function to set the gain of the four channels of the ADC
+     
+     Inputs are the log base 2 of the desired gain to be applied to each
+     channel.
+
+     Returns true if gain was succesfully set.
+
+     Function written by Iris Clercq-Roques
+  */
+  uint16_t gainCommand=log2Gain3<<4;
+  gainCommand+=log2Gain2;
+  gainCommand<<=8;
+  gainCommand+=(log2gainCommand<<4);
+  gainCommand+=log2Gain0;
+  return writeReg(GAIN1, gainCommand);
 }
 
 uint16_t ADS131M04::readReg(uint8_t reg) {
