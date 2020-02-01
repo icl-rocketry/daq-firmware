@@ -34,6 +34,7 @@ struct sensors {
     int32_t load2;
     int32_t load3;
     int32_t load4;
+    uint32_t currTime;
 };
 
 //create instance for struct
@@ -165,6 +166,7 @@ void dataLoop() {
     sensorData.ptap3 = analogRead(PTAP3);
     sensorData.ptap4 = analogRead(PTAP4);
     sensorData.ptap5 = analogRead(PTAP5);
+    sensorData.currTime = millis();
 
     // Read ADC data
     int32_t AdcOutArr[4];
@@ -210,6 +212,8 @@ void dataLoop() {
     file.print(sensorData.load3);
     file.print(",");
     file.print(sensorData.load4);
+    file.print(",");
+    file.print(sensorData.currTime);
     file.print(",");
     file.print("\n");
 
