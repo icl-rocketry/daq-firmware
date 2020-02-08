@@ -2,14 +2,16 @@
 #include "sensors.h"
 #include "pyro.h"
 
+Sensors sensInst = Sensors();
+
 void setup() {
   pinMode(5, OUTPUT);
   Serial.begin(115200);
   
-  setupSensors();
+  sensInst.setupSensors();
 
   // Do nothing until the SD card has initialised
-  while (!setupSD()) {}
+  while (!sensInst.setupSD()) {}
   setupWIFI();
 
   bool EMatchBlown=false;
@@ -19,5 +21,5 @@ void setup() {
 }
 
 void loop() {
-  dataLoop(true);
+  sensInst.dataLoop(true);
 }

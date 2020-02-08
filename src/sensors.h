@@ -2,9 +2,12 @@
 #include <Adafruit_MAX31855.h>
 #include "daq_pins.h"
 
+#ifndef SENSORS_H
+#define SENSORS_H
+
 class Sensors{
     public:
-        Sensors(struct sensors);
+        Sensors();
         void setupSensors();
         double readThermocoupleInternal();
         double readThermocoupleCelsius(uint8_t i);
@@ -16,3 +19,4 @@ class Sensors{
         struct sensors;
 };
 
+#endif
