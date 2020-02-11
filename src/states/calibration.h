@@ -9,14 +9,15 @@ Written by Electronics Team, Imperial College London Rocketry
 
 #include "Arduino.h"
 #include "state.h"
+#include "stateMachine.h"
 
 #ifndef CALIBRATION_H
 #define CALIBRATION_H
 
 class Calibration: public State {
   public:
-    void init();
+    void initialise();
     void update();
-}
+};
 
 #endif

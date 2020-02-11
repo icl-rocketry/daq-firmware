@@ -1,10 +1,11 @@
 #include "Arduino.h"
 #include "idle.h"
+#include "stateMachine.h"
 
-Idle::init() {
+void Idle::initialise() {
 
 }
 
-Idle::update() {
+void Idle::update() {
 
 }

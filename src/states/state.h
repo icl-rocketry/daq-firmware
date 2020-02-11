@@ -11,8 +11,8 @@ Written by Electronics Team, Imperial College London Rocketry
 
 class State {
   public:
-    virtual void init();
+    virtual void initialise();
     virtual void update();
-}
+};
 
 #endif

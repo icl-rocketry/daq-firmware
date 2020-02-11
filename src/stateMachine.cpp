@@ -10,7 +10,7 @@ Written by the Electronics team, Imperial College London Rocketry
 stateMachine::stateMachine() {
 }
 
-bool stateMachine::init(state * initStatePtr) {
+bool stateMachine::initialise(State * initStatePtr) {
   changeState(initStatePtr);
 }
 
@@ -18,8 +18,8 @@ void stateMachine::update() {
   _currStatePtr -> update();
 }
 
-void stateMachine::changeState(state * newStatePtr) {
-  _currStatePtr = newState;
-  _currStatePtr - > init;
+void stateMachine::changeState(State * newStatePtr) {
+  _currStatePtr = newStatePtr;
+  _currStatePtr -> initialise();
 }
 

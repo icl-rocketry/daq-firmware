@@ -5,6 +5,7 @@ Written by the Electronics team, Imperial College London Rocketry
 */
 
 #include "Arduino.h"
+#include "states/state.h"
 
 #ifndef STATEMACHINE_H
 #define STATEMACHINE_H
@@ -12,12 +13,12 @@ Written by the Electronics team, Imperial College London Rocketry
 class stateMachine {
   public:
     stateMachine();
-    bool init(state * initStatePtr);
+    bool initialise(State * initStatePtr);
     void update();
-    void changeState(state * newStatePtr);
+    void changeState(State * newStatePtr);
 
   private:
-    state * _currStatePtr;
-}
+    State * _currStatePtr;
+};
 
 #endif

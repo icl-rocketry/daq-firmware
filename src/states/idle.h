@@ -6,14 +6,15 @@ Written by Electronics Team, Imperial College London Rocketry
 */
 #include "Arduino.h"
 #include "state.h"
+#include "stateMachine.h"
 
 #ifndef IDLE_H
 #define IDLE_H
 
 class Idle: public State {
   public:
-    void init();
+    void initialise();
     void update();
-}
+};
 
 #endif
