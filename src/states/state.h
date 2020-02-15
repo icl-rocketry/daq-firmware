@@ -12,7 +12,7 @@ Written by Electronics Team, Imperial College London Rocketry
 class State {
   public:
     virtual void initialise();
-    virtual void update();
+    virtual State* update();
 };
 
 #endif

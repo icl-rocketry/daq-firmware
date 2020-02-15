@@ -1,11 +1,11 @@
 #include "Arduino.h"
 #include "calibration.h"
-#include "stateMachine.h"
+#include "state.h"
 
 void Calibration::initialise() {
 
 }
 
-void Calibration::update() {
+State* Calibration::update() {
 
 }

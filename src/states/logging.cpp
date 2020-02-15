@@ -1,11 +1,11 @@
 #include "Arduino.h"
 #include "logging.h"
-#include "stateMachine.h"
+#include "state.h"
 
 void Logging::initialise() {
 
 }
 
-void Logging::update() {
+State* Logging::update() {
 
 }

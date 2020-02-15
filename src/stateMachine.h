@@ -13,12 +13,12 @@ Written by the Electronics team, Imperial College London Rocketry
 class stateMachine {
   public:
     stateMachine();
-    bool initialise(State * initStatePtr);
+    bool initialise(State* initStatePtr);
     void update();
-    void changeState(State * newStatePtr);
+    void changeState(State* newStatePtr);
 
   private:
-    State * _currStatePtr;
+    State* _currStatePtr;
 };
 
 #endif

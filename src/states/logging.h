@@ -18,7 +18,7 @@ Written by Electronics Team, Imperial College London Rocketry
 class Logging: public State {
   public:
     void initialise();
-    void update();
+    State* update();
 };
 
 #endif

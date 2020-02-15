@@ -14,7 +14,7 @@ Written by Electronics Team, Imperial College London Rocketry
 class Idle: public State {
   public:
     void initialise();
-    void update();
+    State* update();
 };
 
 #endif
