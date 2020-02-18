@@ -6,19 +6,21 @@
 #include <iostream>
 #include <fstream>
 #include "ADS131M04.h"
-#include "daq_pins.h"
+#include <Adafruit_MAX31855.h>
 
-//class
-SPIClass vspi(VSPI);
-SPIClass sdspi(HSPI);
 
-Adafruit_MAX31855 thermocouple1(TC_CS1, &vspi);
-Adafruit_MAX31855 thermocouple2(TC_CS2, &vspi);
-Adafruit_MAX31855 thermocouple3(TC_CS3, &vspi);
-Adafruit_MAX31855 thermocouple4(TC_CS4, &vspi);
-ADS131M04 ADC=ADS131M04(ADC_CS, CLKOUT, &vspi);
-
-Sensors::Sensors(){
+Sensors::Sensors(uint8_t TC_CS1_PIN, uint8_t TC_CS2_PIN, uint8_t TC_CS3_PIN, uint8_t TC_CS4_PIN, uint8_t ADC_CS_PIN, uint8_t CLKOUT_PIN, uint8_t PTAP1_PIN, uint8_t PTAP2_PIN, uint8_t PTAP3_PIN, uint8_t PTAP4_PIN, uint8_t PTAP5_PIN){
+  _TC_CS1_PIN = TC_CS1_PIN;
+  _TC_CS2_PIN = TC_CS2_PIN;
+  _TC_CS3_PIN = TC_CS3_PIN;
+  _TC_CS4_PIN = TC_CS4_PIN;
+  _ADC_CS_PIN = ADC_CS_PIN;
+  _CLKOUT_PIN = CLKOUT_PIN;
+  _PTAP1_PIN = PTAP1_PIN;
+  _PTAP2_PIN = PTAP2_PIN;
+  _PTAP3_PIN = PTAP3_PIN;
+  _PTAP4_PIN = PTAP4_PIN;
+  _PTAP5_PIN = PTAP5_PIN;
 
 }
 
@@ -32,17 +34,17 @@ void Sensors::setupSensors() {
     thermocouple3.begin();
     thermocouple4.begin();
     //initialise output variables as output
-    pinMode(TC_CS1, OUTPUT);
-    pinMode(TC_CS2, OUTPUT);
-    pinMode(TC_CS3, OUTPUT);
-    pinMode(TC_CS4, OUTPUT);
-    pinMode(ADC_CS, OUTPUT);
+    pinMode(_TC_CS1_PIN, OUTPUT);
+    pinMode(_TC_CS2_PIN, OUTPUT);
+    pinMode(_TC_CS3_PIN, OUTPUT);
+    pinMode(_TC_CS4_PIN, OUTPUT);
+    pinMode(_ADC_CS_PIN, OUTPUT);
     //initialise outputs as high
-    digitalWrite(TC_CS1, HIGH);
-    digitalWrite(TC_CS2, HIGH);
-    digitalWrite(TC_CS3, HIGH);
-    digitalWrite(TC_CS4, HIGH);
-    digitalWrite(ADC_CS, HIGH);
+    digitalWrite(_TC_CS1_PIN, HIGH);
+    digitalWrite(_TC_CS2_PIN, HIGH);
+    digitalWrite(_TC_CS3_PIN, HIGH);
+    digitalWrite(_TC_CS4_PIN, HIGH);
+    digitalWrite(_ADC_CS_PIN, HIGH);
 
     // Set ADC gain to 4
     ADC.setGain(2,2,2,2);
@@ -134,23 +136,23 @@ double Sensors::readThermocoupleCelsius(uint8_t i){
 double Sensors::readPtap(uint16_t i){
     switch(i){
         case 1:
-        return analogRead(PTAP1);
+        return analogRead(_PTAP1_PIN);
         break;
 
         case 2:
-        return analogRead(PTAP2);
+        return analogRead(_PTAP2_PIN);
         break;
 
         case 3:
-        return analogRead(PTAP3);
+        return analogRead(_PTAP3_PIN);
         break;
 
         case 4:
-        return analogRead(PTAP4);
+        return analogRead(_PTAP4_PIN);
         break;
 
         case 5:
-        return analogRead(PTAP5);
+        return analogRead(_PTAP5_PIN);
         break;
 
         default:
@@ -169,11 +171,11 @@ void Sensors::dataLoop(bool EMatchState) {
     _sensorData.thermo2 = thermocouple2.readCelsius();
     _sensorData.thermo3 = thermocouple3.readCelsius();
     _sensorData.thermo4 = thermocouple4.readCelsius();
-    _sensorData.ptap1 = analogRead(PTAP1);
-    _sensorData.ptap2 = analogRead(PTAP2);
-    _sensorData.ptap3 = analogRead(PTAP3);
-    _sensorData.ptap4 = analogRead(PTAP4);
-    _sensorData.ptap5 = analogRead(PTAP5);
+    _sensorData.ptap1 = analogRead(_PTAP1_PIN);
+    _sensorData.ptap2 = analogRead(_PTAP2_PIN);
+    _sensorData.ptap3 = analogRead(_PTAP3_PIN);
+    _sensorData.ptap4 = analogRead(_PTAP4_PIN);
+    _sensorData.ptap5 = analogRead(_PTAP5_PIN);
     _sensorData.currTime = millis();
     _sensorData.EMatchBlown = EMatchState;
 
