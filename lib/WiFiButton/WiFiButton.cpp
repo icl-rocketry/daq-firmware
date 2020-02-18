@@ -1,7 +1,7 @@
 // Load Wi-Fi library
 #include <WiFi.h>
 #include "sensors.h"
-#include "pyro.h"
+#include "WiFiButton.h"
 #include "daq_pins.h"
 
 // WIFI credentials
