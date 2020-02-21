@@ -9,6 +9,19 @@ Written by the Electronics team, Imperial College London Rocketry
 #include "states/state.h"
 
 bool stateMachine::initialise(State* initStatePtr) {
+  pinMode(5, OUTPUT);
+  Serial.begin(115200);
+  
+  sensInst.setupSensors();
+
+  // Do nothing until the SD card has initialised
+  while (!sensInst.setupSD()) {}
+  setupWIFI();
+
+  bool EMatchBlown=false;
+  while (!EMatchBlown) {
+    EMatchBlown = WIFIloop();
+  }
   changeState(initStatePtr);
 }
 

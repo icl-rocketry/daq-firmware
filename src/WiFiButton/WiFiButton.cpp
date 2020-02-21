@@ -4,19 +4,6 @@
 #include "WiFiButton.h"
 #include "daq_pins.h"
 
-// WIFI credentials
-const char *ssid = "ICLR_DAQ";
-const char *password = "rocketsAreCool!";
-
-// Set web server port number to 80
-WiFiServer server(80);
-
-// Variable to store the HTTP request
-String header;
-
-// Auxiliar variables to store the current output state
-String pyroState = "off";
-
 void setupWIFI()
 {
   // Initialize the output variables as outputs
