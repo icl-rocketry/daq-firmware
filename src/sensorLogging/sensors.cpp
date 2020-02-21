@@ -9,6 +9,21 @@
 #include <Adafruit_MAX31855.h>
 #include "daq_pins.h"
 
+bool EMatchState;
+
+// Class initialisations
+
+File file;
+
+SPIClass vspi = SPIClass(VSPI);
+SPIClass sdspi = SPIClass(HSPI);
+
+Adafruit_MAX31855 thermocouple1 = Adafruit_MAX31855(TC_CS1, &vspi);
+Adafruit_MAX31855 thermocouple2 = Adafruit_MAX31855(TC_CS2, &vspi);
+Adafruit_MAX31855 thermocouple3 = Adafruit_MAX31855(TC_CS3, &vspi);
+Adafruit_MAX31855 thermocouple4 = Adafruit_MAX31855(TC_CS4, &vspi);
+ADS131M04 ADC = ADS131M04(ADC_CS, CLKOUT, &vspi);
+
 void setupSensors() {
     vspi.setClockDivider(SPI_CLOCK_DIV8);
     vspi.begin();

@@ -13,7 +13,7 @@ void setup() {
 
   // Initialise logging hardware
   while (!setupSD()) {}
-  setupSensors;
+  setupSensors();
 
   // Initialise the interface
   setupWIFI();

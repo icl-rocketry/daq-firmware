@@ -1,8 +1,20 @@
 // Load Wi-Fi library
 #include <WiFi.h>
-#include "sensors.h"
 #include "WiFiButton.h"
 #include "daq_pins.h"
+
+// WIFI credentials
+const char *ssid = "ICLR_DAQ";
+const char *password = "rocketsAreCool!";
+
+// Variable to store the HTTP request
+String header;
+
+// Auxiliar variables to store the current output state
+String pyroState = "off";
+
+// Set web server port number to 80
+WiFiServer server(80);
 
 void setupWIFI()
 {
