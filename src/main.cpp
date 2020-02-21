@@ -1,13 +1,28 @@
 #include <Arduino.h>
-#include "sensors.h"
-#include "WiFiButton.h"
-#include "daq_pins.h"
+#include "stateMachine.h"
+#include "sensorLogging/sensors.h"
+#include "WiFiButton/WiFiButton.h"
+#include "states/idle.h"
 
-Sensors sensInst = Sensors(TC_CS1, TC_CS2, TC_CS3, TC_CS4, ADC_CS, CLKOUT, PTAP1, PTAP2, PTAP3, PTAP4, PTAP5);
+stateMachine stateMach;
+Idle initialState;
 
 void setup() {
+  pinMode(5, OUTPUT);
+  Serial.begin(115200);
+
+  // Initialise logging hardware
+  while (!setupSD()) {}
+  setupSensors;
+
+  // Initialise the interface
+  setupWIFI();
+
+  // Start the state machine with the correct initial state
+  stateMach.initialise(new Idle);
 }
 
 void loop() {
-  sensInst.dataLoop(true);
+  // Rerun the state machine
+  stateMach.update();
 }
