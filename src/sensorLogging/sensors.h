@@ -11,7 +11,7 @@ void setupSensors();
 double readThermocoupleInternal();
 double readThermocoupleCelsius(uint8_t i);
 double readPtap(uint16_t i);
-void dataLoop(bool EMatchState);
+void dataLoop(bool writeToSD);
 bool setupSD();
 struct sensors;
 
