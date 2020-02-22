@@ -1,23 +1,28 @@
 #include <Arduino.h>
-#include "sensors.h"
-#include "pyro.h"
+#include "stateMachine.h"
+#include "sensorLogging/sensors.h"
+#include "WiFiButton/WiFiButton.h"
+#include "states/idle.h"
+
+stateMachine stateMach;
+Idle initialState;
 
 void setup() {
   pinMode(5, OUTPUT);
   Serial.begin(115200);
-  
+
+  // Initialise logging hardware
+  while (!setupSD()) {}
   setupSensors();
 
-  // Do nothing until the SD card has initialised
-  while (!setupSD()) {}
+  // Initialise the interface
   setupWIFI();
 
-  bool EMatchBlown=false;
-  while (!EMatchBlown) {
-    EMatchBlown = WIFIloop();
-  }
+  // Start the state machine with the correct initial state
+  stateMach.initialise(new Idle);
 }
 
 void loop() {
-  dataLoop(true);
+  // Rerun the state machine
+  stateMach.update();
 }
