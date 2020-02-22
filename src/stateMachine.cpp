@@ -8,7 +8,7 @@ Written by the Electronics team, Imperial College London Rocketry
 #include "stateMachine.h"
 #include "states/state.h"
 
-bool stateMachine::initialise(State* initStatePtr) {
+void stateMachine::initialise(State* initStatePtr) {
   changeState(initStatePtr);
 }
 

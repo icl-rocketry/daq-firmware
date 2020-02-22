@@ -12,7 +12,7 @@ Written by the Electronics team, Imperial College London Rocketry
 
 class stateMachine {
   public:
-    bool initialise(State* initStatePtr);
+    void initialise(State* initStatePtr);
     void update();
     void changeState(State* newStatePtr);
 
