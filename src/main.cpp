@@ -12,7 +12,6 @@ void setup() {
   Serial.begin(115200);
 
   // Initialise logging hardware
-  while (!setupSD()) {}
   setupSensors();
 
   // Initialise the interface

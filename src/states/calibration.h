@@ -18,6 +18,7 @@ class Calibration: public State {
   public:
     void initialise();
     State* update();
+    int8_t stateID = 1;
 };
 
 #endif

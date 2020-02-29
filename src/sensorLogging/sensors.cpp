@@ -8,6 +8,11 @@
 #include "ADS131M04.h"
 #include <Adafruit_MAX31855.h>
 #include "daq_pins.h"
+#include "states/logging.h"
+#include "states/calibration.h"
+#include "states/state.h"
+#include <typeinfo>
+
 
 bool EMatchState;
 
@@ -54,7 +59,7 @@ void setupSensors() {
 }
 
 //set up the SD card
-bool setupSD(){
+bool setupSD(State* logStatePtr){
     //spi pins
     sdspi.begin(14, 2, 15, -1);
 
@@ -68,8 +73,27 @@ bool setupSD(){
     }
     Serial.println("Card initialized.");
 
-    //opening file in SD 
+/*
+    switch(decltype(*logStatePtr)){
+        case Logging:
+            file = SD.open("/sensor_data.csv", FILE_APPEND);
+            break;
+
+        case Calibration:
+            file = SD.open("/calibration_data.csv", FILE_APPEND);
+            break;
+      
+    }
+*/  
+    if (logStatePtr -> getID() == 2) {
+    // If the button was pressed, return new instance of logging state
     file = SD.open("/sensor_data.csv", FILE_APPEND);
+
+  } else if (logStatePtr -> getID() == 1){
+    file = SD.open("/calibration_data.csv", FILE_APPEND);;
+  }
+    //opening file in SD 
+    //file = SD.open("/sensor_data.csv", FILE_APPEND);
 
     //error message if file is not opened
     if(!file)

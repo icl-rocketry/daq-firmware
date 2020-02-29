@@ -19,6 +19,7 @@ class Logging: public State {
   public:
     void initialise();
     State* update();
+    int8_t stateID = 2;
 };
 
 #endif
