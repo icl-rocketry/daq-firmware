@@ -5,6 +5,7 @@
 #include "sensorLogging/sensors.h"
 
 void Calibration::initialise() {
+  stateID = 1;
   while (!setupSD(this)) {}
 }
 

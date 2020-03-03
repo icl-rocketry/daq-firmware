@@ -6,12 +6,12 @@
 #include "logging.h"
 
 void Idle::initialise() {
-
+  stateID = 0;
 }
 
 State* Idle::update() {
 
-  dataLoop(false);
+  //dataLoop(false);
 
   if (WIFIloop()) {
     // If the button was pressed, return new instance of logging state

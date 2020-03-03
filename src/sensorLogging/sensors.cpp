@@ -89,7 +89,7 @@ bool setupSD(State* logStatePtr){
     // If the button was pressed, return new instance of logging state
     file = SD.open("/sensor_data.csv", FILE_APPEND);
 
-  } else if (logStatePtr -> getID() == 1){
+  } else {//if (logStatePtr -> getID() == 1){
     file = SD.open("/calibration_data.csv", FILE_APPEND);;
   }
     //opening file in SD 
@@ -183,7 +183,6 @@ double readPtap(uint16_t i){
 
 void dataLoop(bool writeToSD) {
 
-    Serial.println("Logging data");
     sensors _sensorData;
 
     //writing data into struct
@@ -219,6 +218,7 @@ void dataLoop(bool writeToSD) {
     // Check where to write data
     if (writeToSD == true) {
       outputPtr = &file;
+      Serial.println("Logging to SD");
     } else {
       outputPtr = &Serial;
     }
