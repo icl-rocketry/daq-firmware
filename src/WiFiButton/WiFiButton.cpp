@@ -11,7 +11,7 @@ const char *password = "rocketsAreCool!";
 String header;
 
 // Auxiliar variables to store the current output state
-String pyroState = "off";
+String pyroState = "idle";
 
 // Set web server port number to 80
 WiFiServer server(80);
@@ -33,10 +33,10 @@ void setupWIFI()
   server.begin();
 }
 
-bool WIFIloop()
+int WIFIloop()
 {
   WiFiClient client = server.available();
-  bool pyroEnabled = false;
+  int pointer = 1;
 
   // Start connection
   if (client)
@@ -71,14 +71,14 @@ bool WIFIloop()
               {
                 Serial.println("EMatch in idle state");
                 pyroState = "idle";
-                pyroEnabled = false;
+                pointer = 1;
                 digitalWrite(PYRO_CHANNEL_PIN, LOW);
               }
               else if (header.indexOf("GET /pyro/cal") >= 0)
               {
                 Serial.println("EMatch in calibration state");
                 pyroState = "cal";
-                pyroEnabled = true;
+                pointer = 2;
                 digitalWrite(PYRO_CHANNEL_PIN, HIGH);
               }
 
@@ -86,7 +86,7 @@ bool WIFIloop()
               {
                 Serial.println("EMatch in logging state");
                 pyroState = "log";
-                pyroEnabled = true;
+                pointer = 3;
                 digitalWrite(PYRO_CHANNEL_PIN, HIGH);
               }
 
@@ -167,5 +167,5 @@ bool WIFIloop()
     Serial.println("Disconnecting...");
     client.stop();
   }
-  return pyroEnabled;
+  return pointer;
 }
