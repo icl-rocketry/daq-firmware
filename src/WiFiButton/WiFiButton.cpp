@@ -66,31 +66,43 @@ bool WIFIloop()
 
             if (header.indexOf("GET /pyro") >= 0)
             {
-              // Turns the EMatch on and off
-              if (header.indexOf("GET /pyro/on") >= 0)
+              // Switch EMatch between idle, calibration and logging states
+              if (header.indexOf("GET /pyro/idle") >= 0)
               {
-                Serial.println("EMatch on");
-                pyroState = "on";
+                Serial.println("EMatch in idle state");
+                pyroState = "idle";
+                pyroEnabled = false;
+                digitalWrite(PYRO_CHANNEL_PIN, LOW);
+              }
+              else if (header.indexOf("GET /pyro/cal") >= 0)
+              {
+                Serial.println("EMatch in calibration state");
+                pyroState = "cal";
                 pyroEnabled = true;
                 digitalWrite(PYRO_CHANNEL_PIN, HIGH);
               }
-              else if (header.indexOf("GET /pyro/off") >= 0)
+
+              else if (header.indexOf("GET /pyro/log") >= 0)
               {
-                Serial.println("EMatch off");
-                pyroState = "off";
-                pyroEnabled = false;
-                digitalWrite(PYRO_CHANNEL_PIN, LOW);
+                Serial.println("EMatch in logging state");
+                pyroState = "log";
+                pyroEnabled = true;
+                digitalWrite(PYRO_CHANNEL_PIN, HIGH);
               }
 
               // Display the HTML web page
               client.println("<!DOCTYPE html><html>");
               client.println("<head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">");
               client.println("<link rel=\"icon\" href=\"data:,\">");
-              // CSS to style the on/off buttons
+              // CSS to style the two buttons
               client.println("<style>html { font-family: Helvetica; display: inline-block; margin: 0px auto; text-align: center;}");
+              // Calibration button (green)
               client.println(".button { background-color: #00FF00; border: none; color: white; padding: 16px 40px;");
               client.println("text-decoration: none; font-size: 30px; margin: 2px; cursor: pointer;}");
-              client.println(".button2 {background-color: #FF0000;}</style></head>");
+              // Idle button (blue)
+              client.println(".button2 {background-color: #0000FF;}"); 
+              // Logging button (red)
+              client.println(".button3 {background-color: #FF0000;}</style></head>");
 
               // Web Page Heading
               client.println("<body><h1>ESP32 Web Server</h1>");
@@ -99,14 +111,22 @@ bool WIFIloop()
               client.println("<p>EMatch - State " + pyroState + "</p>");
 
               // If the pyroState is off, it displays the ON button
-              if (pyroState == "off")
+              if (pyroState == "idle")
               {
-                client.println("<p><a href=\"/pyro/on\"><button class=\"button\">ON</button></a></p>");
+                client.println("<p><a href=\"/pyro/cal\"><button class=\"button\">CALIBRATION</button></a></p>");
+                client.println("<p><a href=\"/pyro/log\"><button class=\"button button3\">LOGGING</button></a></p>");
+              }
+              else if (pyroState == "cal")
+              {
+                client.println("<p><a href=\"/pyro/idle\"><button class=\"button button2\">IDLE</button></a></p>");
+                client.println("<p><a href=\"/pyro/log\"><button class=\"button button3\">LOGGING</button></a></p>");
               }
               else
               {
-                client.println("<p><a href=\"/pyro/off\"><button class=\"button button2\">OFF</button></a></p>");
+                client.println("<p><a href=\"/pyro/cal\"><button class=\"button\">CALIBRATION</button></a></p>");
+                client.println("<p><a href=\"/pyro/idle\"><button class=\"button button2\">IDLE</button></a></p>");
               }
+              
               client.println("</body></html>");
 
               // The HTTP response ends with another blank line
@@ -118,7 +138,7 @@ bool WIFIloop()
             else if (header.indexOf("GET /status") >= 0)
             {
               client.print("Ematch Status: ");
-              client.println(digitalRead(PYRO_CHANNEL_PIN));
+              client.println(pyroState);
 
               client.print("Continuity Status: ");
               client.println(digitalRead(PYRO_CHANNEL_CONT));
