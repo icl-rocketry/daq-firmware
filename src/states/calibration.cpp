@@ -5,7 +5,7 @@
 #include "sensorLogging/sensors.h"
 
 void Calibration::initialise() {
-
+  while (!setupSD(this)) {}
 }
 
 State* Calibration::update() {

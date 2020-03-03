@@ -5,7 +5,7 @@
 #include "daq_pins.h"
 
 void Logging::initialise() {
- while (!setupSD(this)) {}
+  while (!setupSD(this)) {}
   digitalWrite(PYRO_CHANNEL_PIN, HIGH);
 }
 
