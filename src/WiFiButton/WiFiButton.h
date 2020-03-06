@@ -5,6 +5,6 @@
 #define WIFIBUTTON_H
 
 void setupWIFI();
-bool WIFIloop();
+int WIFIloop();
 
 #endif
