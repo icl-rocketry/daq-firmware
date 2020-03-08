@@ -18,7 +18,8 @@ class Calibration: public State {
   public:
     void initialise();
     State* update();
-    int8_t stateID = 1;
+    //uint8_t getID();
+    uint8_t stateID = CALIBRATION_STATE;
 };
 
 #endif

@@ -1,5 +1,5 @@
 #include "state.h"
 
-int8_t State::getID() {
+uint8_t State::getID(){
     return stateID;
 }

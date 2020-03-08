@@ -19,7 +19,8 @@ class Logging: public State {
   public:
     void initialise();
     State* update();
-    int8_t stateID = 2;
+    //uint8_t getID();
+    uint8_t stateID = LOGGING_STATE;
 };
 
 #endif

@@ -15,7 +15,8 @@ class Idle: public State {
   public:
     void initialise();
     State* update();
-    int8_t stateID = 0;
+    //uint8_t getID();
+    uint8_t stateID = IDLE_STATE;
 };
 
 #endif

@@ -85,11 +85,11 @@ bool setupSD(State* logStatePtr){
       
     }
 */  
-    if (logStatePtr -> getID() == 2) {
+    if (logStatePtr -> getID() == LOGGING_STATE) {
     // If the button was pressed, return new instance of logging state
     file = SD.open("/sensor_data.csv", FILE_APPEND);
 
-  } else {//if (logStatePtr -> getID() == 1){
+  } else {//if (logStatePtr -> getID() == CALIBRATION_STATE){
     file = SD.open("/calibration_data.csv", FILE_APPEND);;
   }
     //opening file in SD 

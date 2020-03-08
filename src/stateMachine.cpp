@@ -18,7 +18,6 @@ void stateMachine::update() {
   if (newStatePtr != _currStatePtr) {
     changeState(newStatePtr);
   }
-  Serial.println(_currStatePtr -> getID());
 }
 
 void stateMachine::changeState(State* newStatePtr) {
