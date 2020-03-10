@@ -5,7 +5,6 @@
 #include "sensorLogging/sensors.h"
 
 void Calibration::initialise() {
-  stateID = CALIBRATION_STATE;
   while (!setupSD(this)) {}
 }
 
@@ -21,8 +20,3 @@ State* Calibration::update() {
     return this;
   }
 }
-
-/*
-uint8_t Calibration::getID(){
-    return stateID;
-}*/

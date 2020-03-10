@@ -17,10 +17,11 @@ Written by Electronics Team, Imperial College London Rocketry
 
 class Logging: public State {
   public:
+    // Initialise the class by passing the correct ID to the state class
+    Logging(): State(LOGGING_STATE) {};
+
     void initialise();
-    State* update();
-    //uint8_t getID();
-    uint8_t stateID = LOGGING_STATE;
+    State* update();;
 };
 
 #endif

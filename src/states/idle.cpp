@@ -6,7 +6,6 @@
 #include "logging.h"
 
 void Idle::initialise() {
-  stateID = IDLE_STATE;
 }
 
 State* Idle::update() {
@@ -22,8 +21,3 @@ State* Idle::update() {
     return this;
   }
 }
-
-/*
-uint8_t Idle::getID(){
-    return stateID;
-}*/
