@@ -5,6 +5,6 @@
 #define WIFIBUTTON_H
 
 void setupWIFI();
-int WIFIloop();
+int WIFIloop(int currStateID);
 
 #endif

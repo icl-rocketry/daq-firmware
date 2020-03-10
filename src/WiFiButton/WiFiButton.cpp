@@ -10,8 +10,7 @@ const char *password = "rocketsAreCool!";
 // Variable to store the HTTP request
 String header;
 
-// Auxiliar variables to store the current output state
-String pyroState = "idle";
+String pyroState;
 
 // Set web server port number to 80
 WiFiServer server(80);
@@ -33,10 +32,10 @@ void setupWIFI()
   server.begin();
 }
 
-int WIFIloop()
+int WIFIloop(int currStateID)
 {
   WiFiClient client = server.available();
-  int pointer = 1;
+  int stateID = 0;
 
   // Start connection
   if (client)
@@ -70,24 +69,21 @@ int WIFIloop()
               if (header.indexOf("GET /pyro/idle") >= 0)
               {
                 Serial.println("EMatch in idle state");
-                pyroState = "idle";
-                pointer = 1;
-                digitalWrite(PYRO_CHANNEL_PIN, LOW);
+                pyroState = "Idle";
+                stateID = 1;
               }
               else if (header.indexOf("GET /pyro/cal") >= 0)
               {
                 Serial.println("EMatch in calibration state");
-                pyroState = "cal";
-                pointer = 2;
-                digitalWrite(PYRO_CHANNEL_PIN, HIGH);
+                pyroState = "Calibration";
+                stateID = 2;
               }
 
               else if (header.indexOf("GET /pyro/log") >= 0)
               {
                 Serial.println("EMatch in logging state");
-                pyroState = "log";
-                pointer = 3;
-                digitalWrite(PYRO_CHANNEL_PIN, HIGH);
+                pyroState = "Logging";
+                stateID = 3;
               }
 
               // Display the HTML web page
@@ -111,17 +107,17 @@ int WIFIloop()
               client.println("<p>EMatch - State " + pyroState + "</p>");
 
               // If the pyroState is off, it displays the ON button
-              if (pyroState == "idle")
+              if (currStateID == 1)
               {
                 client.println("<p><a href=\"/pyro/cal\"><button class=\"button\">CALIBRATION</button></a></p>");
                 client.println("<p><a href=\"/pyro/log\"><button class=\"button button3\">LOGGING</button></a></p>");
               }
-              else if (pyroState == "cal")
+              else if (currStateID == 2)
               {
                 client.println("<p><a href=\"/pyro/idle\"><button class=\"button button2\">IDLE</button></a></p>");
                 client.println("<p><a href=\"/pyro/log\"><button class=\"button button3\">LOGGING</button></a></p>");
               }
-              else
+              else if (currStateID == 3)
               {
                 client.println("<p><a href=\"/pyro/cal\"><button class=\"button\">CALIBRATION</button></a></p>");
                 client.println("<p><a href=\"/pyro/idle\"><button class=\"button button2\">IDLE</button></a></p>");
@@ -167,5 +163,5 @@ int WIFIloop()
     Serial.println("Disconnecting...");
     client.stop();
   }
-  return pointer;
+  return stateID;
 }
