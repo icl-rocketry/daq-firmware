@@ -13,7 +13,7 @@ State* Idle::update() {
   // Print data to Serial for live plotting
   dataLoop(false);
 
-  if (WIFIloop()) {
+  if (WIFIloop(this -> stateID)) {
     // If the button was pressed, return new instance of logging state
     State* logStatePtr = new Logging();
     return logStatePtr;

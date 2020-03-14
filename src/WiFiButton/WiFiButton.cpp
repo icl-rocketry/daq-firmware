@@ -2,6 +2,7 @@
 #include <WiFi.h>
 #include "WiFiButton.h"
 #include "daq_pins.h"
+#include "states/state.h"
 
 // WIFI credentials
 const char *ssid = "ICLR_DAQ";
@@ -70,20 +71,20 @@ int WIFIloop(int currStateID)
               {
                 Serial.println("EMatch in idle state");
                 pyroState = "Idle";
-                stateID = 1;
+                stateID = IDLE_STATE;
               }
               else if (header.indexOf("GET /pyro/cal") >= 0)
               {
                 Serial.println("EMatch in calibration state");
                 pyroState = "Calibration";
-                stateID = 2;
+                stateID = CALIBRATION_STATE;
               }
 
               else if (header.indexOf("GET /pyro/log") >= 0)
               {
                 Serial.println("EMatch in logging state");
                 pyroState = "Logging";
-                stateID = 3;
+                stateID = LOGGING_STATE;
               }
 
               // Display the HTML web page
@@ -107,17 +108,17 @@ int WIFIloop(int currStateID)
               client.println("<p>EMatch - State " + pyroState + "</p>");
 
               // If the pyroState is off, it displays the ON button
-              if (currStateID == 1)
+              if (currStateID == IDLE_STATE)
               {
                 client.println("<p><a href=\"/pyro/cal\"><button class=\"button\">CALIBRATION</button></a></p>");
                 client.println("<p><a href=\"/pyro/log\"><button class=\"button button3\">LOGGING</button></a></p>");
               }
-              else if (currStateID == 2)
+              else if (currStateID == CALIBRATION_STATE)
               {
                 client.println("<p><a href=\"/pyro/idle\"><button class=\"button button2\">IDLE</button></a></p>");
                 client.println("<p><a href=\"/pyro/log\"><button class=\"button button3\">LOGGING</button></a></p>");
               }
-              else if (currStateID == 3)
+              else if (currStateID == LOGGING_STATE)
               {
                 client.println("<p><a href=\"/pyro/cal\"><button class=\"button\">CALIBRATION</button></a></p>");
                 client.println("<p><a href=\"/pyro/idle\"><button class=\"button button2\">IDLE</button></a></p>");
