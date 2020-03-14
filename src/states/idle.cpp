@@ -10,7 +10,8 @@ void Idle::initialise() {
 
 State* Idle::update() {
 
-  //dataLoop(false);
+  // Print data to Serial for live plotting
+  dataLoop(false);
 
   if (WIFIloop()) {
     // If the button was pressed, return new instance of logging state
