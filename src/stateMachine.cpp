@@ -25,4 +25,6 @@ void stateMachine::changeState(State* newStatePtr) {
   delete _currStatePtr;
   _currStatePtr = newStatePtr;
   _currStatePtr -> initialise();
+  Serial.print("CHANGED TO STATE: ");
+  Serial.println(_currStatePtr -> getID());
 }

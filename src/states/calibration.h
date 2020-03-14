@@ -16,9 +16,11 @@ Written by Electronics Team, Imperial College London Rocketry
 
 class Calibration: public State {
   public:
+    // Initialise the class by passing the correct ID to the state class
+    Calibration(): State(CALIBRATION_STATE) {};
+
     void initialise();
     State* update();
-    int8_t stateID = 1;
 };
 
 #endif
