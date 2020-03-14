@@ -10,6 +10,12 @@ void Idle::initialise() {
 
 State* Idle::update() {
 
+  int wifiOutput = WIFIloop(this -> stateID);
+  if (wifiOutput != 0) {
+    Serial.println(wifiOutput);
+  }
+  /*
+     CODE REMOVED FOR DEBUG PURPOSES ONLY, DO NOT MERGE
   // Print data to Serial for live plotting
   dataLoop(false);
 
@@ -21,4 +27,5 @@ State* Idle::update() {
   } else {
     return this;
   }
+  */
 }
