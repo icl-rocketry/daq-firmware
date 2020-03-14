@@ -17,6 +17,9 @@ Written by Electronics Team, Imperial College London Rocketry
 
 class Logging: public State {
   public:
+    // Initialise the class by passing the correct ID to the state class
+    Logging(): State(LOGGING_STATE) {};
+
     void initialise();
     State* update();
 };

@@ -6,11 +6,11 @@
 #include "logging.h"
 
 void Idle::initialise() {
-
 }
 
 State* Idle::update() {
 
+  // Print data to Serial for live plotting
   dataLoop(false);
 
   if (WIFIloop()) {
