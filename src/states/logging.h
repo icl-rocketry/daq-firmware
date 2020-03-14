@@ -21,7 +21,7 @@ class Logging: public State {
     Logging(): State(LOGGING_STATE) {};
 
     void initialise();
-    State* update();;
+    State* update();
 };
 
 #endif
