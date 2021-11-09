@@ -6,5 +6,7 @@
 
 void setupWIFI();
 bool WIFIloop();
+bool pullDispSett();
+
 
 #endif

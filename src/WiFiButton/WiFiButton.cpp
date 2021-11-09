@@ -2,7 +2,7 @@
 #include <WiFi.h>
 #include "WiFiButton.h"
 #include "daq_pins.h"
-
+#include "sensors.h"
 // WIFI credentials
 const char *ssid = "ICLR_DAQ";
 const char *password = "rocketsAreCool!";
@@ -12,10 +12,14 @@ String header;
 
 // Auxiliar variables to store the current output state
 String pyroState = "off";
+String dispState = "off"; //Kiryl
+bool dispTurnedOn = false;
 
 // Set web server port number to 80
 WiFiServer server(80);
-
+bool pullDispSett(){
+  return dispTurnedOn;
+}
 void setupWIFI()
 {
   // Initialize the output variables as outputs
@@ -37,7 +41,6 @@ bool WIFIloop()
 {
   WiFiClient client = server.available();
   bool pyroEnabled = false;
-
   // Start connection
   if (client)
   {
@@ -81,7 +84,22 @@ bool WIFIloop()
                 pyroEnabled = false;
                 digitalWrite(PYRO_CHANNEL_PIN, LOW);
               }
-
+            }
+            //Kiryl
+            if (header.indexOf("GET /disp") >= 0)
+            {
+              if (header.indexOf("GET /disp/on") >= 0)
+              {
+                Serial.println("Display On");
+                dispState = "on";
+                dispTurnedOn = true;
+              }
+              else if (header.indexOf("GET /disp/off") >= 0 && dispState = "on")
+              {
+                Serial.println("Display Off");
+                dispState = "off";
+              }
+            }
               // Display the HTML web page
               client.println("<!DOCTYPE html><html>");
               client.println("<head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">");
@@ -97,18 +115,45 @@ bool WIFIloop()
 
               // Display current state, and ON/OFF buttons for EMatch
               client.println("<p>EMatch - State " + pyroState + "</p>");
+              client.println("<p>Data Display - State " + dispState + "</p>")
 
               // If the pyroState is off, it displays the ON button
               if (pyroState == "off")
               {
-                client.println("<p><a href=\"/pyro/on\"><button class=\"button\">ON</button></a></p>");
+                client.println("<p><a href=\"/pyro/on\"><button class=\"button\">Pyro On</button></a></p>");
               }
               else
               {
-                client.println("<p><a href=\"/pyro/off\"><button class=\"button button2\">OFF</button></a></p>");
+                client.println("<p><a href=\"/pyro/off\"><button class=\"button button2\">Pyro Off</button></a></p>");
+              }
+              if (dispState == "off")
+              {
+                client.println("<p><a href=\"/disp/on\"><button class=\"button\">Disp On</button></a></p>")
+              }
+              else
+              {
+                client.println("<p><a href=\"/disp/off\"><button class=\"button\">Disp Off</button></a></p>")
+                oup = readDispData();
+                client.println("<p>Temperatures, Internal: " + String(*oup) + "</p>");
+                oup++;
+                for(int i = 0; i<4;i++){
+                  client.println("<p>Thermo"+String(i+1)+":" +String(*oup)"</p>");
+                  oup++;
+                }
+                client.println("<p>Pressures, PTAP1: " + String(*oup) + "</p>");
+                oup++;
+                for(int i = 0; i<4;i++){
+                  client.println("<p>PTAP"+String(i+2)+":" +String(*oup)"</p>");
+                  oup++;
+                }
+                client.println("<p>Loads,</p>");
+                for(int i = 0; i<4 i++){
+                  client.println("<p>Load"+String(i+1)+":" +String(*oup)"</p>");
+                  oup++;
+                }
+
               }
               client.println("</body></html>");
-
               // The HTTP response ends with another blank line
               client.println();
 

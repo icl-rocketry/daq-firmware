@@ -11,6 +11,7 @@ void setupSensors();
 double readThermocoupleInternal();
 double readThermocoupleCelsius(uint8_t i);
 double readPtap(uint16_t i);
+sensors readDispData(); //KIRYL
 void dataLoop(bool writeToSD);
 bool setupSD();
 struct sensors;
