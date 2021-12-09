@@ -33,7 +33,7 @@ void setupWIFI()
   server.begin();
 }
 
-bool WIFIloop()
+bool WIFIloop(bool logging)
 {
   WiFiClient client = server.available();
   bool pyroEnabled = false;
@@ -72,14 +72,12 @@ bool WIFIloop()
                 Serial.println("EMatch on");
                 pyroState = "on";
                 pyroEnabled = true;
-                digitalWrite(PYRO_CHANNEL_PIN, HIGH);
               }
               else if (header.indexOf("GET /pyro/off") >= 0)
               {
                 Serial.println("EMatch off");
                 pyroState = "off";
                 pyroEnabled = false;
-                digitalWrite(PYRO_CHANNEL_PIN, LOW);
               }
 
               // Display the HTML web page
@@ -108,6 +106,13 @@ bool WIFIloop()
                 client.println("<p><a href=\"/pyro/off\"><button class=\"button button2\">OFF</button></a></p>");
               }
               client.println("</body></html>");
+              
+              client.println("Current State: ");
+              if (logging) {
+                client.println("LOGGING");
+              } else {
+                client.println("IDLE"); 
+              }
 
               // The HTTP response ends with another blank line
               client.println();
