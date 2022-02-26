@@ -12,12 +12,13 @@ String header;
 
 // Auxiliar variables to store the current output state
 String pyroState = "off";
-String dispState = "off"; //Kiryl
+String dispState = "on"; // Kiryl
 bool dispTurnedOn = false;
 
 // Set web server port number to 80
 WiFiServer server(80);
-bool pullDispSett(){
+bool pullDispSett()
+{
   return dispTurnedOn;
 }
 void setupWIFI()
@@ -84,22 +85,7 @@ bool WIFIloop()
                 pyroEnabled = false;
                 digitalWrite(PYRO_CHANNEL_PIN, LOW);
               }
-            
-            //Kiryl
-            if (header.indexOf("GET /disp") >= 0)
-            {
-              if (header.indexOf("GET /disp/on") >= 0)
-              {
-                Serial.println("Display On");
-                dispState = "on";
-                dispTurnedOn = true;
-              }
-              else if (header.indexOf("GET /disp/off") >= 0 && dispState == "on")
-              {
-                Serial.println("Display Off");
-                dispState = "off";
-              }
-            }
+
               // Display the HTML web page
               client.println("<!DOCTYPE html><html>");
               client.println("<head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">");
@@ -133,28 +119,30 @@ bool WIFIloop()
               else
               {
                 client.println("<p><a href=\"/disp/off\"><button class=\"button\">Disp Off</button></a></p>");
-                double outputArray [14];
-                double* oup = outputArray;
+                double outputArray[14];
+                double *oup = outputArray;
                 readDispData(oup);
-                
+
                 client.println("<p>Temperatures, Internal: " + String(*oup) + "</p>");
                 oup++;
-                for(int i = 0; i<4;i++){
-                  client.println("<p>Thermo"+String(i+1)+":" +String(*oup) + "</p>");
+                for (int i = 0; i < 4; i++)
+                {
+                  client.println("<p>Thermo" + String(i + 1) + ":" + String(*oup) + "</p>");
                   oup++;
                 }
                 client.println("<p>Pressures, PTAP1: " + String(*oup) + "</p>");
                 oup++;
-                for(int i = 0; i<4;i++){
-                  client.println("<p>PTAP"+String(i+2)+":" +String(*oup) + "</p>");
+                for (int i = 0; i < 4; i++)
+                {
+                  client.println("<p>PTAP" + String(i + 2) + ":" + String(*oup) + "</p>");
                   oup++;
                 }
                 client.println("<p>Loads,</p>");
-                for(int i = 0; i<4 ;i++){
-                  client.println("<p>Load"+String(i+1)+":" +String(*oup) + "</p>");
+                for (int i = 0; i < 4; i++)
+                {
+                  client.println("<p>Load" + String(i + 1) + ":" + String(*oup) + "</p>");
                   oup++;
                 }
-
               }
               client.println("</body></html>");
               // The HTTP response ends with another blank line
@@ -172,6 +160,20 @@ bool WIFIloop()
               client.println(digitalRead(PYRO_CHANNEL_CONT));
 
               break;
+            }
+            else if (header.indexOf("GET /disp") >= 0)
+            {
+              if (header.indexOf("GET /disp/on") >= 0)
+              {
+                Serial.println("Display On");
+                dispState = "on";
+                dispTurnedOn = true;
+              }
+              else if (header.indexOf("GET /disp/off") >= 0 && dispState == "on")
+              {
+                Serial.println("Display Off");
+                dispState = "off";
+              }
             }
           }
           else
