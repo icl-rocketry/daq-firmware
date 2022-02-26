@@ -2,7 +2,7 @@
 #include <WiFi.h>
 #include "WiFiButton.h"
 #include "daq_pins.h"
-#include "sensors.h"
+#include "../sensorLogging/sensors.h"
 // WIFI credentials
 const char *ssid = "ICLR_DAQ";
 const char *password = "rocketsAreCool!";
@@ -84,7 +84,7 @@ bool WIFIloop()
                 pyroEnabled = false;
                 digitalWrite(PYRO_CHANNEL_PIN, LOW);
               }
-            }
+            
             //Kiryl
             if (header.indexOf("GET /disp") >= 0)
             {
@@ -94,7 +94,7 @@ bool WIFIloop()
                 dispState = "on";
                 dispTurnedOn = true;
               }
-              else if (header.indexOf("GET /disp/off") >= 0 && dispState = "on")
+              else if (header.indexOf("GET /disp/off") >= 0 && dispState == "on")
               {
                 Serial.println("Display Off");
                 dispState = "off";
@@ -115,7 +115,7 @@ bool WIFIloop()
 
               // Display current state, and ON/OFF buttons for EMatch
               client.println("<p>EMatch - State " + pyroState + "</p>");
-              client.println("<p>Data Display - State " + dispState + "</p>")
+              client.println("<p>Data Display - State " + dispState + "</p>");
 
               // If the pyroState is off, it displays the ON button
               if (pyroState == "off")
@@ -128,27 +128,30 @@ bool WIFIloop()
               }
               if (dispState == "off")
               {
-                client.println("<p><a href=\"/disp/on\"><button class=\"button\">Disp On</button></a></p>")
+                client.println("<p><a href=\"/disp/on\"><button class=\"button\">Disp On</button></a></p>");
               }
               else
               {
-                client.println("<p><a href=\"/disp/off\"><button class=\"button\">Disp Off</button></a></p>")
-                oup = readDispData();
+                client.println("<p><a href=\"/disp/off\"><button class=\"button\">Disp Off</button></a></p>");
+                double outputArray [14];
+                double* oup = outputArray;
+                readDispData(oup);
+                
                 client.println("<p>Temperatures, Internal: " + String(*oup) + "</p>");
                 oup++;
                 for(int i = 0; i<4;i++){
-                  client.println("<p>Thermo"+String(i+1)+":" +String(*oup)"</p>");
+                  client.println("<p>Thermo"+String(i+1)+":" +String(*oup) + "</p>");
                   oup++;
                 }
                 client.println("<p>Pressures, PTAP1: " + String(*oup) + "</p>");
                 oup++;
                 for(int i = 0; i<4;i++){
-                  client.println("<p>PTAP"+String(i+2)+":" +String(*oup)"</p>");
+                  client.println("<p>PTAP"+String(i+2)+":" +String(*oup) + "</p>");
                   oup++;
                 }
                 client.println("<p>Loads,</p>");
-                for(int i = 0; i<4 i++){
-                  client.println("<p>Load"+String(i+1)+":" +String(*oup)"</p>");
+                for(int i = 0; i<4 ;i++){
+                  client.println("<p>Load"+String(i+1)+":" +String(*oup) + "</p>");
                   oup++;
                 }
 

@@ -157,36 +157,46 @@ double readPtap(uint16_t i){
     }
 }
 // KIRYL
-double* readDispData(){
-    sensors _sensorDispData;
+void readDispData(double* outputArrPtr){
     //writing data into struct
-    _sensorDispData.thermoAmbient = thermocouple1.readInternal();    
-    _sensorDispData.thermo1 = thermocouple1.readCelsius();
-    _sensorDispData.thermo2 = thermocouple2.readCelsius();
-    _sensorDispData.thermo3 = thermocouple3.readCelsius();
-    _sensorDispData.thermo4 = thermocouple4.readCelsius();
-    _sensorDispData.ptap1 = analogRead(PTAP1);
-    _sensorDispData.ptap2 = analogRead(PTAP2);
-    _sensorDispData.ptap3 = analogRead(PTAP3);
-    _sensorDispData.ptap4 = analogRead(PTAP4);
-    _sensorDispData.ptap5 = analogRead(PTAP5);
-    _sensorDispData.currTime = millis();
+    *outputArrPtr = thermocouple1.readInternal();  // Ambient temp 
+    outputArrPtr++; 
+    *outputArrPtr = thermocouple1.readCelsius();
+    outputArrPtr++; 
+    *outputArrPtr = thermocouple2.readCelsius();
+    outputArrPtr++; 
+    *outputArrPtr = thermocouple3.readCelsius();
+    outputArrPtr++; 
+    *outputArrPtr = thermocouple4.readCelsius();
+    outputArrPtr++; 
+    *outputArrPtr = analogRead(PTAP1);
+    outputArrPtr++; 
+    *outputArrPtr = analogRead(PTAP2);
+    outputArrPtr++; 
+    *outputArrPtr = analogRead(PTAP3);
+    outputArrPtr++; 
+    *outputArrPtr = analogRead(PTAP4);
+    outputArrPtr++; 
+    *outputArrPtr = analogRead(PTAP5);
+    outputArrPtr++; 
+    *outputArrPtr = millis();
+    outputArrPtr++; 
+
     // Read ADC data
     int32_t AdcOutArr[4];
     int8_t AdcChanArr[4] = {0, 1, 2, 3};
 
     ADC.rawChannels(&AdcChanArr[0], 4, &AdcOutArr[0]);
 
-    _sensorDispData.load1 = AdcOutArr[0];
-    _sensorDispData.load2 = AdcOutArr[1];
-    _sensorDispData.load3 = AdcOutArr[2];
-    _sensorDispData.load4 = AdcOutArr[3];
-    double sensordat[14] = [_sensorDispData.thermoAmbient, _sensorDispData.thermo1, _sensorDispData.thermo2, _sensorDispData.thermo3,
-        _sensorDispData.thermo4, _sensorDispData.ptap1, _sensorDispData.ptap2, _sensorDispData.ptap3, _sensorDispData.ptap4, 
-        _sensorDispData.ptap5, _sensorDispData.load1, _sensorDispData.load2, _sensorDispData.load3, _sensorDispData.load4];
-    
-    return &sensordat;
+    *outputArrPtr = AdcOutArr[0];
+    outputArrPtr++; 
+    *outputArrPtr = AdcOutArr[1];
+    outputArrPtr++; 
+    *outputArrPtr = AdcOutArr[2];
+    outputArrPtr++; 
+    *outputArrPtr = AdcOutArr[3];
 }
+
 void dataLoop(bool writeToSD) {
 
     Serial.println("Logging data");
