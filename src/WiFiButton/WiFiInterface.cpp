@@ -68,6 +68,76 @@ bool WIFIloop()
             client.println("Connection: close");
             client.println();
 
+            // Display the HTML web page
+            client.println("<!DOCTYPE html><html>");
+            client.println("<head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">");
+            client.println("<link rel=\"icon\" href=\"data:,\">");
+            // CSS to style the on/off buttons
+            client.println("<style>html { font-family: Helvetica; display: inline-block; margin: 0px auto; text-align: center;}");
+            client.println(".button { background-color: #00FF00; border: none; color: white; padding: 16px 40px;");
+            client.println("text-decoration: none; font-size: 30px; margin: 2px; cursor: pointer;}");
+            client.println(".button2 {background-color: #FF0000;}</style></head>");
+
+            // Web Page Heading
+            client.println("<body><h1>ESP32 Web Server</h1>");
+
+            // Display current state, and ON/OFF buttons for EMatch
+            client.println("<p>EMatch - State " + pyroState + "</p>");
+            client.println("<p>Data Display - State " + dispState + "</p>");
+
+            // If the pyroState is off, it displays the ON button
+            if (pyroState == "off")
+            {
+              client.println("<p><a href=\"/pyro/on\"><button class=\"button\">Pyro On</button></a></p>");
+            }
+            else
+            {
+              client.println("<p><a href=\"/pyro/off\"><button class=\"button button2\">Pyro Off</button></a></p>");
+            }
+            if (dispState == "off")
+            {
+              client.println("<p><a href=\"/disp/on\"><button class=\"button\">Disp On</button></a></p>");
+            }
+            else
+            {
+              client.println("<p><a href=\"/disp/off\"><button class=\"button\">Disp Off</button></a></p>");
+              double outputArray[14];
+              double *oup = outputArray;
+              readDispData(oup);
+
+              client.println("<p>Temperatures, Internal: " + String(*oup) + "</p>");
+              oup++;
+              for (int i = 0; i < 4; i++)
+              {
+                client.println("<p>Thermo" + String(i + 1) + ":" + String(*oup) + "</p>");
+                oup++;
+              }
+              client.println("<p>Pressures, PTAP1: " + String(*oup) + "</p>");
+              oup++;
+              for (int i = 0; i < 4; i++)
+              {
+                client.println("<p>PTAP" + String(i + 2) + ":" + String(*oup) + "</p>");
+                oup++;
+              }
+              client.println("<p>Loads,</p>");
+              for (int i = 0; i < 4; i++)
+              {
+                client.println("<p>Load" + String(i + 1) + ":" + String(*oup) + "</p>");
+                oup++;
+              }
+            }
+            
+            if (header.indexOf("GET /status") >= 0)
+            {
+              client.print("Ematch Status: ");
+              client.println(digitalRead(PYRO_CHANNEL_PIN));
+
+              client.print("Continuity Status: ");
+              client.println(digitalRead(PYRO_CHANNEL_CONT));
+
+              break;
+            }
+
             if (header.indexOf("GET /pyro") >= 0)
             {
               // Turns the EMatch on and off
@@ -85,96 +155,37 @@ bool WIFIloop()
                 pyroEnabled = false;
                 digitalWrite(PYRO_CHANNEL_PIN, LOW);
               }
-
-              // Display the HTML web page
-              client.println("<!DOCTYPE html><html>");
-              client.println("<head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">");
-              client.println("<link rel=\"icon\" href=\"data:,\">");
-              // CSS to style the on/off buttons
-              client.println("<style>html { font-family: Helvetica; display: inline-block; margin: 0px auto; text-align: center;}");
-              client.println(".button { background-color: #00FF00; border: none; color: white; padding: 16px 40px;");
-              client.println("text-decoration: none; font-size: 30px; margin: 2px; cursor: pointer;}");
-              client.println(".button2 {background-color: #FF0000;}</style></head>");
-
-              // Web Page Heading
-              client.println("<body><h1>ESP32 Web Server</h1>");
-
-              // Display current state, and ON/OFF buttons for EMatch
-              client.println("<p>EMatch - State " + pyroState + "</p>");
-              client.println("<p>Data Display - State " + dispState + "</p>");
-
-              // If the pyroState is off, it displays the ON button
-              if (pyroState == "off")
-              {
-                client.println("<p><a href=\"/pyro/on\"><button class=\"button\">Pyro On</button></a></p>");
-              }
-              else
-              {
-                client.println("<p><a href=\"/pyro/off\"><button class=\"button button2\">Pyro Off</button></a></p>");
-              }
-              if (dispState == "off")
-              {
-                client.println("<p><a href=\"/disp/on\"><button class=\"button\">Disp On</button></a></p>");
-              }
-              else
-              {
-                client.println("<p><a href=\"/disp/off\"><button class=\"button\">Disp Off</button></a></p>");
-                double outputArray[14];
-                double *oup = outputArray;
-                readDispData(oup);
-
-                client.println("<p>Temperatures, Internal: " + String(*oup) + "</p>");
-                oup++;
-                for (int i = 0; i < 4; i++)
-                {
-                  client.println("<p>Thermo" + String(i + 1) + ":" + String(*oup) + "</p>");
-                  oup++;
-                }
-                client.println("<p>Pressures, PTAP1: " + String(*oup) + "</p>");
-                oup++;
-                for (int i = 0; i < 4; i++)
-                {
-                  client.println("<p>PTAP" + String(i + 2) + ":" + String(*oup) + "</p>");
-                  oup++;
-                }
-                client.println("<p>Loads,</p>");
-                for (int i = 0; i < 4; i++)
-                {
-                  client.println("<p>Load" + String(i + 1) + ":" + String(*oup) + "</p>");
-                  oup++;
-                }
-              }
-              client.println("</body></html>");
-              // The HTTP response ends with another blank line
-              client.println();
-
-              // Break out of the while loop
-              break;
             }
-            else if (header.indexOf("GET /status") >= 0)
-            {
-              client.print("Ematch Status: ");
-              client.println(digitalRead(PYRO_CHANNEL_PIN));
 
-              client.print("Continuity Status: ");
-              client.println(digitalRead(PYRO_CHANNEL_CONT));
-
-              break;
-            }
-            else if (header.indexOf("GET /disp") >= 0)
+            if (header.indexOf("GET /disp") >= 0)
             {
               if (header.indexOf("GET /disp/on") >= 0)
               {
                 Serial.println("Display On");
                 dispState = "on";
                 dispTurnedOn = true;
+
+                client.print("<HEAD>");
+                client.print("<meta http-equiv=\"refresh\" content=\"0;url=/\">");
+                client.print("</head>");
               }
               else if (header.indexOf("GET /disp/off") >= 0 && dispState == "on")
               {
                 Serial.println("Display Off");
                 dispState = "off";
+                dispTurnedOn = false;
+
+                client.print("<HEAD>");
+                client.print("<meta http-equiv=\"refresh\" content=\"0;url=/\">");
+                client.print("</head>");
               }
             }
+            client.println("</body></html>");
+            // The HTTP response ends with another blank line
+            client.println();
+
+            // Break out of the while loop
+            break;
           }
           else
           { // if you got a newline, then clear currentLine
