@@ -146,14 +146,12 @@ bool WIFIloop()
                 Serial.println("EMatch on");
                 pyroState = "on";
                 pyroEnabled = true;
-                digitalWrite(PYRO_CHANNEL_PIN, HIGH);
               }
               else if (header.indexOf("GET /pyro/off") >= 0)
               {
                 Serial.println("EMatch off");
                 pyroState = "off";
                 pyroEnabled = false;
-                digitalWrite(PYRO_CHANNEL_PIN, LOW);
               }
             }
 
