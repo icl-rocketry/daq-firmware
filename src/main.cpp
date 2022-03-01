@@ -1,7 +1,7 @@
 #include <Arduino.h>
 #include "stateMachine.h"
 #include "sensorLogging/sensors.h"
-#include "WiFiButton/WiFiButton.h"
+#include "WiFiButton/WiFiInterface.h"
 #include "states/idle.h"
 
 stateMachine stateMach;
