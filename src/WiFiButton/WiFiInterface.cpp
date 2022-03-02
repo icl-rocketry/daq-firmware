@@ -71,6 +71,7 @@ bool WIFIloop()
             // Display the HTML web page
             client.println("<!DOCTYPE html><html>");
             client.println("<head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">");
+            client.println("<meta http-equiv=\"refresh\" CONTENT=\"5\">");
             client.println("<link rel=\"icon\" href=\"data:,\">");
             // CSS to style the on/off buttons
             client.println("<style>html { font-family: Helvetica; display: inline-block; margin: 0px auto; text-align: center;}");
@@ -79,28 +80,18 @@ bool WIFIloop()
             client.println(".button2 {background-color: #FF0000;}</style></head>");
 
             // Web Page Heading
-            client.println("<body><h1>ESP32 Web Server</h1>");
+            client.println("<body><h1>Le DAQ Control Panel</h1>");
 
             // Display current state, and ON/OFF buttons for EMatch
-            client.println("<p>EMatch - State " + pyroState + "</p>");
+            client.println("<p>Logging - State " + pyroState + "</p>");
             client.println("<p>Data Display - State " + dispState + "</p>");
 
-            // If the pyroState is off, it displays the ON button
-            if (pyroState == "off")
-            {
-              client.println("<p><a href=\"/pyro/on\"><button class=\"button\">Pyro On</button></a></p>");
-            }
-            else
-            {
-              client.println("<p><a href=\"/pyro/off\"><button class=\"button button2\">Pyro Off</button></a></p>");
-            }
             if (dispState == "off")
             {
               client.println("<p><a href=\"/disp/on\"><button class=\"button\">Disp On</button></a></p>");
             }
             else
             {
-              client.println("<p><a href=\"/disp/off\"><button class=\"button\">Disp Off</button></a></p>");
               double outputArray[14];
               double *oup = outputArray;
               readDispData(oup);
@@ -109,22 +100,35 @@ bool WIFIloop()
               oup++;
               for (int i = 0; i < 4; i++)
               {
-                client.println("<p>Thermo" + String(i + 1) + ":" + String(*oup) + "</p>");
+                client.println("<p>Thermo" + String(i + 1) + ": " + String(*oup) + "</p>");
                 oup++;
               }
               client.println("<p>Pressures, PTAP1: " + String(*oup) + "</p>");
               oup++;
               for (int i = 0; i < 4; i++)
               {
-                client.println("<p>PTAP" + String(i + 2) + ":" + String(*oup) + "</p>");
+                client.println("<p>PTAP" + String(i + 2) + ": " + String(*oup) + "</p>");
                 oup++;
               }
-              client.println("<p>Loads,</p>");
+              client.println("<p>Loads:</p>");
               for (int i = 0; i < 4; i++)
               {
-                client.println("<p>Load" + String(i + 1) + ":" + String(*oup) + "</p>");
+                client.println("<p>Load" + String(i + 1) + ": " + String(*oup) + "</p>");
                 oup++;
               }
+
+              // Display the button
+              client.println("<p><a href=\"/disp/off\"><button class=\"button\">Disp Off</button></a></p>");
+            }
+            
+            // If the pyroState is off, it displays the ON button
+            if (pyroState == "off")
+            {
+              client.println("<p><a href=\"/pyro/on\"><button class=\"button\">Logging Mode On</button></a></p>");
+            }
+            else
+            {
+              client.println("<p><a href=\"/pyro/off\"><button class=\"button button2\">Logging Mode Off</button></a></p>");
             }
             
             if (header.indexOf("GET /status") >= 0)
