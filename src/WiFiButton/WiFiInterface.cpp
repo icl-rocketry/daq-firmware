@@ -17,10 +17,7 @@ bool dispTurnedOn = false;
 
 // Set web server port number to 80
 WiFiServer server(80);
-bool pullDispSett()
-{
-  return dispTurnedOn;
-}
+
 void setupWIFI()
 {
   // Initialize the output variables as outputs

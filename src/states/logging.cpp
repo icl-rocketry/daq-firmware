@@ -10,8 +10,6 @@ void Logging::initialise() {
 }
 
 State* Logging::update() {
-  if(pullDispSett()){
-    dataLoop(true);
-  }
+  dataLoop(true);
   return this;
 }
