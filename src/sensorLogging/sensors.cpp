@@ -156,6 +156,46 @@ double readPtap(uint16_t i){
         return -1;
     }
 }
+// KIRYL
+void readDispData(double* outputArrPtr){
+    //writing data into struct
+    *outputArrPtr = thermocouple1.readInternal();  // Ambient temp 
+    outputArrPtr++; 
+    *outputArrPtr = thermocouple1.readCelsius();
+    outputArrPtr++; 
+    *outputArrPtr = thermocouple2.readCelsius();
+    outputArrPtr++; 
+    *outputArrPtr = thermocouple3.readCelsius();
+    outputArrPtr++; 
+    *outputArrPtr = thermocouple4.readCelsius();
+    outputArrPtr++; 
+    *outputArrPtr = analogRead(PTAP1);
+    outputArrPtr++; 
+    *outputArrPtr = analogRead(PTAP2);
+    outputArrPtr++; 
+    *outputArrPtr = analogRead(PTAP3);
+    outputArrPtr++; 
+    *outputArrPtr = analogRead(PTAP4);
+    outputArrPtr++; 
+    *outputArrPtr = analogRead(PTAP5);
+    outputArrPtr++; 
+    *outputArrPtr = millis();
+    outputArrPtr++; 
+
+    // Read ADC data
+    int32_t AdcOutArr[4];
+    int8_t AdcChanArr[4] = {0, 1, 2, 3};
+
+    ADC.rawChannels(&AdcChanArr[0], 4, &AdcOutArr[0]);
+
+    *outputArrPtr = AdcOutArr[0];
+    outputArrPtr++; 
+    *outputArrPtr = AdcOutArr[1];
+    outputArrPtr++; 
+    *outputArrPtr = AdcOutArr[2];
+    outputArrPtr++; 
+    *outputArrPtr = AdcOutArr[3];
+}
 
 void dataLoop(bool writeToSD) {
 

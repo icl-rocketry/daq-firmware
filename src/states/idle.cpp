@@ -1,7 +1,7 @@
 #include "Arduino.h"
 #include "idle.h"
 #include "state.h"
-#include "WiFiButton/WiFiButton.h"
+#include "WiFiButton/WiFiInterface.h"
 #include "sensorLogging/sensors.h"
 #include "logging.h"
 

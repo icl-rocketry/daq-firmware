@@ -1,9 +1,10 @@
 #include "Arduino.h"
 #include "logging.h"
 #include "state.h"
-#include "WiFiButton/WiFiButton.h"
+#include "WiFiButton/WiFiInterface.h"
 #include "sensorLogging/sensors.h"
 #include "daq_pins.h"
+#include "../WiFiButton/WiFiInterface.h"
 
 
 void Logging::initialise() {
