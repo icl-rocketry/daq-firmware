@@ -11,7 +11,6 @@ const char *password = "rocketsAreCool!";
 String header;
 
 // Auxiliar variables to store the current output state
-String pyroState = "off";
 String dispState = "on"; // Kiryl
 bool dispTurnedOn = false;
 
@@ -37,8 +36,13 @@ void setupWIFI()
 
 bool WIFIloop(bool logging)
 {
+  /*
+  Loop to be run every update whenever the WiFi interface needs to be running
+  Takes single input, whether the system is in logging mode
+  Returns true if the system should be in logging mode, false if not
+  */
   WiFiClient client = server.available();
-  bool pyroEnabled = false;
+  bool loggingEnable = logging; // Set initial value on whether to be in logging from status quo
   // Start connection
   if (client)
   {
@@ -122,14 +126,14 @@ bool WIFIloop(bool logging)
               client.println("<p><a href=\"/disp/off\"><button class=\"button\">Disp Off</button></a></p>");
             }
             
-            // If the pyroState is off, it displays the ON button
-            if (pyroState == "off")
+            // If the system is not in logging mode, it displays the ON button
+            if (!logging)
             {
-              client.println("<p><a href=\"/pyro/on\"><button class=\"button\">Logging Mode On</button></a></p>");
+              client.println("<p><a href=\"/logging/on\"><button class=\"button\">Logging Mode On</button></a></p>");
             }
             else
             {
-              client.println("<p><a href=\"/pyro/off\"><button class=\"button button2\">Logging Mode Off</button></a></p>");
+              client.println("<p><a href=\"/logging/off\"><button class=\"button button2\">Logging Mode Off</button></a></p>");
             }
             
             if (header.indexOf("GET /status") >= 0)
@@ -143,20 +147,18 @@ bool WIFIloop(bool logging)
               break;
             }
 
-            if (header.indexOf("GET /pyro") >= 0)
+            if (header.indexOf("GET /logging") >= 0)
             {
               // Turns the EMatch on and off
-              if (header.indexOf("GET /pyro/on") >= 0)
+              if (header.indexOf("GET /logging/on") >= 0)
               {
                 Serial.println("EMatch on");
-                pyroState = "on";
-                pyroEnabled = true;
+                loggingEnable = true;
               }
-              else if (header.indexOf("GET /pyro/off") >= 0)
+              else if (header.indexOf("GET /logging/off") >= 0)
               {
                 Serial.println("EMatch off");
-                pyroState = "off";
-                pyroEnabled = false;
+                loggingEnable = false;
               }
             }
 
@@ -211,5 +213,5 @@ bool WIFIloop(bool logging)
     Serial.println("Disconnecting...");
     client.stop();
   }
-  return pyroEnabled;
+  return loggingEnable;
 }
