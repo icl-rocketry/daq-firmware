@@ -5,6 +5,7 @@
 #include "sensorLogging/sensors.h"
 #include "daq_pins.h"
 #include "../WiFiButton/WiFiInterface.h"
+#include "states/idle.h"
 
 
 void Logging::initialise() {
@@ -12,7 +13,15 @@ void Logging::initialise() {
 }
 
 State* Logging::update() {
-  WIFIloop(true);
   dataLoop(true);
+
+  if (!WIFIloop(true)) {
+    // If the interface says that we should not be logging, switch to idle state
+    State* idleStatePtr = new Idle();
+    return idleStatePtr;
+
+  } else {
+    return this;
+  }
   return this;
 }
