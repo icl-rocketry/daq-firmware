@@ -152,7 +152,7 @@ bool WIFIloop(bool logging)
               // Turns the EMatch on and off
               if (header.indexOf("GET /logging/on") >= 0)
               {
-                Serial.println("EMatch on");
+                Serial.println("Logging on");
                 loggingEnable = true;
 
                 client.print("<HEAD>");
@@ -161,7 +161,7 @@ bool WIFIloop(bool logging)
               }
               else if (header.indexOf("GET /logging/off") >= 0)
               {
-                Serial.println("EMatch off");
+                Serial.println("Logging off");
                 loggingEnable = false;
 
                 client.print("<HEAD>");

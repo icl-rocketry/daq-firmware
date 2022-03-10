@@ -199,7 +199,6 @@ void readDispData(double* outputArrPtr){
 
 void dataLoop(bool writeToSD) {
 
-    Serial.println("Logging data");
     sensors _sensorData;
 
     //writing data into struct
@@ -231,45 +230,43 @@ void dataLoop(bool writeToSD) {
     //    Serial.println("File's fucked mate");
     //}
 
-    Stream* outputPtr;
+    Stream *outputPtr;
     // Check where to write data
-    if (writeToSD == true) {
-      outputPtr = &file;
-    } else {
-      outputPtr = &Serial;
+    if (writeToSD == true)
+    {
+        outputPtr = &file;
+        // printing data into csv file
+        outputPtr->print(_sensorData.thermoAmbient);
+        outputPtr->print(",");
+        outputPtr->print(_sensorData.thermo1);
+        outputPtr->print(",");
+        outputPtr->print(_sensorData.thermo2);
+        outputPtr->print(",");
+        outputPtr->print(_sensorData.thermo3);
+        outputPtr->print(",");
+        outputPtr->print(_sensorData.thermo4);
+        outputPtr->print(",");
+        outputPtr->print(_sensorData.ptap1);
+        outputPtr->print(",");
+        outputPtr->print(_sensorData.ptap2);
+        outputPtr->print(",");
+        outputPtr->print(_sensorData.ptap3);
+        outputPtr->print(",");
+        outputPtr->print(_sensorData.ptap4);
+        outputPtr->print(",");
+        outputPtr->print(_sensorData.ptap5);
+        outputPtr->print(",");
+        outputPtr->print(_sensorData.load1);
+        outputPtr->print(",");
+        outputPtr->print(_sensorData.load2);
+        outputPtr->print(",");
+        outputPtr->print(_sensorData.load3);
+        outputPtr->print(",");
+        outputPtr->print(_sensorData.load4);
+        outputPtr->print(",");
+        outputPtr->print(_sensorData.currTime);
+        outputPtr->print("\n");
+
+        outputPtr->flush();
     }
-
-    //printing data into csv file
-    outputPtr->print(_sensorData.thermoAmbient);
-    outputPtr->print(",");
-    outputPtr->print(_sensorData.thermo1);
-    outputPtr->print(",");
-    outputPtr->print(_sensorData.thermo2);
-    outputPtr->print(",");
-    outputPtr->print(_sensorData.thermo3);
-    outputPtr->print(",");
-    outputPtr->print(_sensorData.thermo4);
-    outputPtr->print(",");
-    outputPtr->print(_sensorData.ptap1);
-    outputPtr->print(",");
-    outputPtr->print(_sensorData.ptap2);
-    outputPtr->print(",");
-    outputPtr->print(_sensorData.ptap3);
-    outputPtr->print(",");
-    outputPtr->print(_sensorData.ptap4);
-    outputPtr->print(",");
-    outputPtr->print(_sensorData.ptap5);
-    outputPtr->print(",");
-    outputPtr->print(_sensorData.load1);
-    outputPtr->print(",");
-    outputPtr->print(_sensorData.load2);
-    outputPtr->print(",");
-    outputPtr->print(_sensorData.load3);
-    outputPtr->print(",");
-    outputPtr->print(_sensorData.load4);
-    outputPtr->print(",");
-    outputPtr->print(_sensorData.currTime);
-    outputPtr->print("\n");
-
-    outputPtr->flush();
 }
