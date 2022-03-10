@@ -11,7 +11,7 @@ const char *password = "rocketsAreCool!";
 String header;
 
 // Auxiliar variables to store the current output state
-String dispState = "on"; // Kiryl
+String dispState = "off"; // Kiryl
 bool dispTurnedOn = false;
 
 // Set web server port number to 80
@@ -154,11 +154,19 @@ bool WIFIloop(bool logging)
               {
                 Serial.println("EMatch on");
                 loggingEnable = true;
+
+                client.print("<HEAD>");
+                client.print("<meta http-equiv=\"refresh\" content=\"0;url=/\">");
+                client.print("</head>");
               }
               else if (header.indexOf("GET /logging/off") >= 0)
               {
                 Serial.println("EMatch off");
                 loggingEnable = false;
+
+                client.print("<HEAD>");
+                client.print("<meta http-equiv=\"refresh\" content=\"0;url=/\">");
+                client.print("</head>");
               }
             }
 
@@ -174,7 +182,7 @@ bool WIFIloop(bool logging)
                 client.print("<meta http-equiv=\"refresh\" content=\"0;url=/\">");
                 client.print("</head>");
               }
-              else if (header.indexOf("GET /disp/off") >= 0 && dispState == "on")
+              else if (header.indexOf("GET /disp/off") >= 0)
               {
                 Serial.println("Display Off");
                 dispState = "off";
