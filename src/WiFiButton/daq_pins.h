@@ -24,18 +24,10 @@ const uint8_t TC_CS3 = 25;
 const uint8_t TC_CS2 = 26;
 const uint8_t TC_CS1 = 27;
 const uint8_t TC_CS4 = 32;
-const uint8_t PTAP1 = 33; 
+const uint8_t PTAP1 = 33;
 const uint8_t PTAP3 = 34;
 const uint8_t PTAP2 = 35;
 const uint8_t PTAP5 = 36;
 const uint8_t PTAP4 = 39;
-
-
-
-
-
-
-
-
 
 #endif

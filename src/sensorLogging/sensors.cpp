@@ -233,11 +233,11 @@ void dataLoop(bool writeToSD) {
 
     Stream* outputPtr;
     // Check where to write data
-    if (writeToSD == true) {
-      outputPtr = &file;
-    } else {
-      outputPtr = &Serial;
-    }
+    // if (writeToSD == true) {
+    outputPtr = &file;
+    // } else {
+    //   outputPtr = &Serial;
+    // }
 
     //printing data into csv file
     outputPtr->print(_sensorData.thermoAmbient);
@@ -272,4 +272,37 @@ void dataLoop(bool writeToSD) {
     outputPtr->print("\n");
 
     outputPtr->flush();
+
+    Serial.print(_sensorData.thermoAmbient);
+    Serial.print(",");
+    Serial.print(_sensorData.thermo1);
+    Serial.print(",");
+    Serial.print(_sensorData.thermo2);
+    Serial.print(",");
+    Serial.print(_sensorData.thermo3);
+    Serial.print(",");
+    Serial.print(_sensorData.thermo4);
+    Serial.print(",");
+    Serial.print(_sensorData.ptap1);
+    Serial.print(",");
+    Serial.print(_sensorData.ptap2);
+    Serial.print(",");
+    Serial.print(_sensorData.ptap3);
+    Serial.print(",");
+    Serial.print(_sensorData.ptap4);
+    Serial.print(",");
+    Serial.print(_sensorData.ptap5);
+    Serial.print(",");
+    Serial.print(_sensorData.load1);
+    Serial.print(",");
+    Serial.print(_sensorData.load2);
+    Serial.print(",");
+    Serial.print(_sensorData.load3);
+    Serial.print(",");
+    Serial.print(_sensorData.load4);
+    Serial.print(",");
+    Serial.print(_sensorData.currTime);
+    Serial.print("\n");
+
+    Serial.flush();
 }

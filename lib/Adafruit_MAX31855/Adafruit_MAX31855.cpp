@@ -16,14 +16,13 @@
 
 #include "Adafruit_MAX31855.h"
 #ifdef __AVR
-  #include <avr/pgmspace.h>
+#include <avr/pgmspace.h>
 #elif defined(ESP8266)
-  #include <pgmspace.h>
+#include <pgmspace.h>
 #endif
 
-#include <stdlib.h>
 #include <SPI.h>
-
+#include <stdlib.h>
 
 Adafruit_MAX31855::Adafruit_MAX31855(int8_t _sclk, int8_t _cs, int8_t _miso) {
   sclk = _sclk;
@@ -41,7 +40,7 @@ Adafruit_MAX31855::Adafruit_MAX31855(int8_t _cs) {
   spi = &SPI;
 }
 
-Adafruit_MAX31855::Adafruit_MAX31855(int8_t _cs, SPIClass* _spi) {
+Adafruit_MAX31855::Adafruit_MAX31855(int8_t _cs, SPIClass *_spi) {
   cs = _cs;
   sclk = miso = -1;
 
@@ -49,15 +48,14 @@ Adafruit_MAX31855::Adafruit_MAX31855(int8_t _cs, SPIClass* _spi) {
   spi = _spi;
 }
 
-
 void Adafruit_MAX31855::begin(void) {
-  //define pin modes
+  // define pin modes
   pinMode(cs, OUTPUT);
   digitalWrite(cs, HIGH);
 
   if (sclk == -1) {
     // hardware SPI
-    //start and configure hardware SPI
+    // start and configure hardware SPI
     spi->begin();
   } else {
     pinMode(sclk, OUTPUT);
@@ -83,7 +81,7 @@ double Adafruit_MAX31855::readInternal(void) {
     internal = tmp;
   }
   internal *= 0.0625; // LSB = 0.0625 degrees
-  //Serial.print("\tInternal Temp: "); Serial.println(internal);
+  // Serial.print("\tInternal Temp: "); Serial.println(internal);
   return internal;
 }
 
@@ -93,7 +91,7 @@ double Adafruit_MAX31855::readCelsius(void) {
 
   v = spiread32();
 
-  //Serial.print("0x"); Serial.println(v, HEX);
+  // Serial.print("0x"); Serial.println(v, HEX);
 
   /*
   float internal = (v >> 4) & 0x7FF;
@@ -111,12 +109,11 @@ double Adafruit_MAX31855::readCelsius(void) {
   if (v & 0x80000000) {
     // Negative value, drop the lower 18 bits and explicitly extend sign bits.
     v = 0xFFFFC000 | ((v >> 18) & 0x00003FFFF);
-  }
-  else {
+  } else {
     // Positive value, just drop the lower 18 bits.
     v >>= 18;
   }
-  //Serial.println(v, HEX);
+  // Serial.println(v, HEX);
 
   double centigrade = v;
 
@@ -125,9 +122,7 @@ double Adafruit_MAX31855::readCelsius(void) {
   return centigrade;
 }
 
-uint8_t Adafruit_MAX31855::readError() {
-  return spiread32() & 0x7;
-}
+uint8_t Adafruit_MAX31855::readError() { return spiread32() & 0x7; }
 
 double Adafruit_MAX31855::readFarenheit(void) {
   float f = readCelsius();
@@ -142,14 +137,14 @@ uint32_t Adafruit_MAX31855::spiread32(void) {
   uint32_t d = 0;
 
   // backcompatibility!
-  if (! initialized) {
+  if (!initialized) {
     begin();
   }
 
   digitalWrite(cs, LOW);
   // delay(1);
 
-  if(sclk == -1) {
+  if (sclk == -1) {
     // hardware SPI
 
     spi->beginTransaction(SPISettings(4000000, MSBFIRST, SPI_MODE0));
@@ -169,12 +164,12 @@ uint32_t Adafruit_MAX31855::spiread32(void) {
     digitalWrite(sclk, LOW);
     delay(1);
 
-    for (i=31; i>=0; i--) {
+    for (i = 31; i >= 0; i--) {
       digitalWrite(sclk, LOW);
       delay(1);
       d <<= 1;
       if (digitalRead(miso)) {
-	d |= 1;
+        d |= 1;
       }
 
       digitalWrite(sclk, HIGH);
@@ -183,6 +178,6 @@ uint32_t Adafruit_MAX31855::spiread32(void) {
   }
 
   digitalWrite(cs, HIGH);
-  //Serial.println(d, HEX);
+  // Serial.println(d, HEX);
   return d;
 }
