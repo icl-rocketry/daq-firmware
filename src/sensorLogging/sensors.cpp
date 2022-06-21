@@ -199,7 +199,7 @@ void readDispData(double* outputArrPtr){
 
 void dataLoop(bool writeToSD) {
 
-    Serial.println("Logging data");
+    // Serial.println("Logging data");
     sensors _sensorData;
 
     //writing data into struct
